@@ -22,16 +22,16 @@ parameters {
   vector[3] b8;
 }
 model {
-  // b0 ~ normal(0, 1.5);
-  // b1 ~ normal(0, 1.5);
-  // b2 ~ normal(0, 1.5);
-  // b3 ~ normal(0, 1.5);
-  // b4 ~ normal(0, 1.5);
-  // b5 ~ normal(0, 1.5);
-  // b6 ~ normal(0, 1.5);
-  // b7 ~ normal(0, 1.5);
-  // b8 ~ normal(0, 1.5);
-  diag ~ bernoulli_logit(b0 + b1*age + b2[sex] + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7[inte] + b8[res]);
+b0 ~ normal(0, .1);
+b1 ~ normal(0, .1);
+b2 ~ normal(0, .1);
+b3 ~ normal(0, .1);
+b4 ~ normal(0, .1);
+b5 ~ normal(0, .1);
+b6 ~ normal(0, .1);
+b7 ~ normal(0, .1);
+b8 ~ normal(0, .1);
+  diag ~ bernoulli_logit(b1*age + b2[sex] + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7[inte] + b8[res]);
 }
 generated quantities {
   vector[N] alpha;

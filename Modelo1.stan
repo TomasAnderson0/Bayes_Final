@@ -2,12 +2,12 @@ data {
   int<lower=0> N;
   int<lower=0, upper=1> diag[N];
   vector[N] age;
-  int<lower=0, upper=1> sex[N];
+  int sex[N];
   vector[N] vhi;
   vector[N] vi;
   vector[N] ecsf;
   vector[N] vcf;
-  int<lower=0, upper=1> inte[N];
+  int inte[N];
   int res[N];
 }
 parameters {

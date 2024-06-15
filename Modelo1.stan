@@ -13,12 +13,12 @@ data {
 parameters {
   real b0;
   real b1;
-  real b2;
+  vector[2] b2;
   real b3;
   real b4;
   real b5;
   real b6;
-  real b7;
+  vector[2] b7;
   vector[3] b8;
 }
 model {
@@ -31,14 +31,14 @@ model {
   // b6 ~ normal(0, 1.5);
   // b7 ~ normal(0, 1.5);
   // b8 ~ normal(0, 1.5);
-  diag ~ bernoulli_logit(b0 + b1*age + b2*sex + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7*inte + b8{res});
+  diag ~ bernoulli_logit(b0 + b1*age + b2[sex] + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7[inte] + b8[res]);
 }
 generated quantities {
   vector[N] alpha;
   vector[N] y_rep;
   vector[N] log_lik;
 
-  alpha = b0 + b1*age + b2*sex + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7*inte + b8{res};
+  alpha = b0 + b1*age + b2[sex] + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7[inte] + b8[res];
 
   for (i in 1:N) {
     y_rep[i] = bernoulli_logit_rng(alpha[i]);

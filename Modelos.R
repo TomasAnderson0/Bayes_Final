@@ -1,11 +1,13 @@
 library(rstan)
+library(readr)
+library(dplyr)
 
 cerebros <- read_csv("cerebros.csv")
 cerebros$diag = factor(cerebros$diag, levels = c("HC", "MCI", "AD"))
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"))
 
 lista <- list(N = nrow(cerebros),
-              diag = as.numeric(as.factor(cerebros$diag)),
+              diag = (as.numeric(as.factor(cerebros$diag)) - 1),
               age = cerebros$edad,
               sex = as.numeric(as.factor(cerebros$sexo)),
               vhi = cerebros$lh_subcx_hippocampus_volume,
@@ -21,5 +23,6 @@ modelo1 <- stan(
   data = lista,
   chains = 4,
   warmup = 500,
-  iter = 5000
+  iter = 5000,
+  control = list(adapt_delta = 0.99)
 )

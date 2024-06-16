@@ -133,3 +133,34 @@ ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_subcx_hippocampus_
 ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = xh_general_etiv_volume))
 ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_superiorfrontal_thickness))
 ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_fusiform_volume))
+
+graficores <- cerebros %>% select(resonador_fab) %>%
+  count(categ = resonador_fab) %>% mutate(n = n/128) %>% 
+  mutate(barras = as.factor(c(3, 2, 1))) %>% mutate(v = "Resonador")
+
+graficosex <- cerebros %>% select(sexo) %>%
+  count(categ = sexo) %>% mutate(n = n/128) %>% 
+  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo")
+
+graficointe <- cerebros %>% select(intensidad_campo) %>%
+  count(categ = intensidad_campo) %>% mutate(n = n/128) %>% 
+  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Intensidad")
+
+graficodiag <- cerebros %>% select(diag) %>%
+  count(categ = diag) %>% mutate(n = n/128) %>% 
+  mutate(barras = as.factor(c(1, 2))) %>% mutate(v = "diagnóstico")
+
+grafico <- rbind(graficores, graficosex, graficointe, graficodiag)
+
+ggplot() + 
+  geom_bar(data = grafico ,aes(x = v, y = n, fill = barras), stat = "identity") +
+  scale_fill_manual(values = c("#168168", "#38A38A", "#5AC5AC")) +
+  geom_text(data = grafico, aes(x = v, y = c(0.1, 0.32, 0.7,
+                                             0.25, 0.75,
+                                             0.25, 0.75,
+                                             0.25, 0.75),
+                                label = categ), 
+            vjust = -0.5, size = 6, color = "white") + 
+  theme_minimal()
+  theme(legend.position = "none") +
+

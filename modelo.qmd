@@ -27,26 +27,60 @@ Entonces, para pasar a modelar una recta en vez de la variable dicotomica, se ap
 
 ::: {style="font-size: 87%;"}
 
-$$\log(\mathrm{odds}_i)=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$
+Por lo que la nueva variable a modelar sera:
 
-
-
-
+$$Y^*_i=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$
+Entonces, se requiere plantear cuales son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide incluir todas las variables disponibles en el modelo.
 
 
 :::
 
 
+## Modelo 1
+
+::: {style="font-size: 87%;"}
+$$Y^*_i= \beta_0 + \beta_1 VHI_i + \beta_2 VI_i + \beta_3 ECSF_i + \beta_4 VCF_i +$$
+$$\beta_5 Sexo_i + \beta_6 Edad_i + \beta_7 Int_i + \beta_8 Res_{1i} + \beta_9 Res_{2i}$$
+Entonces, para estimar el modelo, primero se procede a elicitar los *priors* de cada parametro que lo conforma.
+
+:::
+
+## Definición de priors
+
+TBA
 
 
+## PP priori
+
+## Ajuste y evaluación del modelo
+
+Se introducen los datos al modelo y utilizando HMC se estiman las distribuciones a *posteriori* de los parametros. La cadenas generadas fueron las siguientes:
 
 
+```{r}
+extract(modelo1,c("b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8")) %>% 
+  setNames(c("Beta 1", "Beta 2", "Sigma", "Hora de la muerte", "5", "6", "7", "8")) %>%   
+  traceplot(pars = c("b1", "b2")) + labs(colour="Cadenas")
+```
 
 
+Todas tienen un $\hat{R}=1$, por lo que las distintas cadenas convergen a la
+misma distribución. Además, las trazas para cada cadena parece seguir un orden aleatorio
+por lo que se considera que la muestra extraída es representativa de la distribución del
+*posterior*. 
+
+## Evaluación del modelo
+
+Algunas medidas de las muestras extraídas son:
+
+tabla
 
 
+## Distribucines a posteriori de los parametros
 
+Una vez ajustado el modelo, se obtienen las siguientes distribuciones a *posteriori*.
 
+## Pruebas predictivas a posteriori
 
 
 

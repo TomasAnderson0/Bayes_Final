@@ -57,6 +57,9 @@ matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, 
 rownames(matrices) = c("Mínimo", "Q1", "Mediana", "Media", "Q3", "Máximo")
 kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"))
 
+# Edad por resonador
+ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = edad))
+
 
 #Int*Resonador
 IR1 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Siemens")
@@ -110,13 +113,13 @@ kable(DI, col.names = c("HC", "MCI&AD"))
 #Diag*Continuas
 plot1 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = edad))
 plot2 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_subcx_hippocampus_volume)) +
-  scale_y_continuous(name = "VHI") + scale_x_continuous(name = "Diagnostico")
+  scale_y_continuous(name = "VHI") + scale_x_continuous(name = "Diagnóstico")
 plot3 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = xh_general_etiv_volume))+
-  scale_y_continuous(name = "VI") + scale_x_continuous(name = "Diagnostico")
+  scale_y_continuous(name = "VI") + scale_x_continuous(name = "Diagnóstico")
 plot4 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_superiorfrontal_thickness))+
-  scale_y_continuous(name = "ECSF") + scale_x_continuous(name = "Diagnostico")
+  scale_y_continuous(name = "ECSF") + scale_x_continuous(name = "Diagnóstico")
 plot5 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_fusiform_volume))+
-  scale_y_continuous(name = "VCF") + scale_x_continuous(name = "Diagnostico")
+  scale_y_continuous(name = "VCF") + scale_x_continuous(name = "Diagnóstico")
 
 
 ggarrange(plot2, plot3, plot4, plot5)

@@ -89,9 +89,9 @@ Se cuentan con la siguiente información de 128 pacientes que se sometieron a di
 
 ::: {.column width="50%"}
 
-- Edad
+- Edad: Edad del paciente.
 - Intensidad: Intensidad del campo magnético utilizado en la imagen, puede ser 3 T o 1.5 T
-- Resonador: Marca del resonador magnético
+- Resonador: Marca del resonador magnético.
 - Diagnostico: puede ser HC (control saludable), MCI (deterioro cognitivo leve) o AD (Enfermedad de Alzheimer).
 
 :::
@@ -151,7 +151,7 @@ graficores <- cerebros %>% select(resonador_fab) %>%
 
 graficosex <- cerebros %>% select(sexo) %>%
   count(categ = sexo) %>% mutate(n = n*100/128) %>% 
-  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo") %>% mutate(categ = ifelse(categ == "male", "Masculino", "Femenino"))
+  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo") %>% mutate(categ = ifelse(categ == "Masculino", "Masculino", "Femenino"))
 
 graficointe <- cerebros %>% select(intensidad_campo) %>%
   count(categ = intensidad_campo) %>% mutate(n = n*100/128) %>% 
@@ -211,7 +211,7 @@ kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"), align = "c")
 
 ## Análisis exploratorio
 
-Para ver si las variables morfológicas varian según el diagnóstico, se grafican los siguientes graficos:
+Para ver si las variables morfológicas varian según el diagnóstico, se construyen los siguientes graficos:
 
 ```{r, fig.align='center'}
 plot1 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_subcx_hippocampus_volume)) +

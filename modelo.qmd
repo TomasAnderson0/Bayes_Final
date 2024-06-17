@@ -1,0 +1,53 @@
+---
+title: "Untitled"
+controls: True
+format: revealjs
+editor: visual
+---
+
+## Descripción matematica
+
+::: {style="font-size: 87%;"}
+Para modelar los diagnosticos, se plantea un modelo bayesiano de regresión logistica. La variable respuesta es:
+
+$$Y = \begin{cases}
+1 \text{ si el paciente muestra deterioro cognitivo patológico} \\
+0 \text{ en caso contrario}
+\end{cases}$$
+
+Donde:  $\; \; \; \; \; \; \; \; Y_i|\pi_i \sim  Bernoulli(\pi_i) \; \; \; \;$  y  $\; \; \; \; E(Y_i) = \pi_i$
+
+\
+
+Entonces, para pasar a modelar una recta en vez de la variable dicotomica, se aplica la función *logit* como función de enlace.   
+
+:::
+
+## Descripción matematica
+
+::: {style="font-size: 87%;"}
+
+$$\log(\mathrm{odds}_i)=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$
+
+
+
+
+
+
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

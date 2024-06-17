@@ -26,7 +26,7 @@ lista <- list(N = nrow(cerebros),
               vcf = cerebros$lh_cortex_fusiform_volume/1000,
               inte = (as.numeric(as.factor(cerebros$intensidad_campo))-1),
               res1 = cerebros$res1,
-              res1 = cerebros$res2
+              res2 = cerebros$res2
 )
 
 modelob0 <- stan(
@@ -39,7 +39,8 @@ modelob0 <- stan(
   seed = 1997
 )
 
-modelo1
+save(modelob0, file = "modelob0.RData")
+modelob0
 
 traceplot(modelo1)
 

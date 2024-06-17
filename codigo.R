@@ -57,6 +57,19 @@ matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, 
 rownames(matrices) = c("Mínimo", "Q1", "Mediana", "Media", "Q3", "Máximo")
 kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"))
 
+
+#Int*Resonador
+IR1 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Siemens")
+IR2 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Siemens")
+IR4 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Philips")
+IR5 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "Philips")
+IR7 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "GE")          
+IR8 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "GE")       
+
+matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, byrow = T)
+rownames(matrices) = c("Mínimo", "Q1", "Mediana", "Media", "Q3", "Máximo")
+kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"))
+
 #Diag*Sexo
 DS1 = sum(cerebros$diag == "HC" & cerebros$sexo == "male")
 DS2 = sum(cerebros$diag == "MCI&AD" & cerebros$sexo == "male")
@@ -133,3 +146,12 @@ ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_subcx_hippocampus_
 ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = xh_general_etiv_volume))
 ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_superiorfrontal_thickness))
 ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_fusiform_volume))
+
+#Continuas*Continuas
+ggplot(cerebros) + geom_point(aes(x = xh_general_etiv_volume, y = lh_subcx_hippocampus_volume))
+ggplot(cerebros) + geom_point(aes(x = lh_cortex_superiorfrontal_thickness, y = lh_subcx_hippocampus_volume))
+ggplot(cerebros) + geom_point(aes(x = lh_cortex_fusiform_volume, y = lh_subcx_hippocampus_volume))
+ggplot(cerebros) + geom_point(aes(x = lh_cortex_fusiform_volume, y = lh_cortex_superiorfrontal_thickness))
+ggplot(cerebros) + geom_point(aes(x = lh_cortex_fusiform_volume, y = xh_general_etiv_volume))
+ggplot(cerebros) + geom_point(aes(x = xh_general_etiv_volume, y = lh_cortex_superiorfrontal_thickness))
+

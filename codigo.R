@@ -140,7 +140,7 @@ graficores <- cerebros %>% select(resonador_fab) %>%
 
 graficosex <- cerebros %>% select(sexo) %>%
   count(categ = sexo) %>% mutate(n = n/128) %>% 
-  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo")
+  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo") %>% mutate(categ = ifelse(categ == "male", "Masculino", "Femenino"))
 
 graficointe <- cerebros %>% select(intensidad_campo) %>%
   count(categ = intensidad_campo) %>% mutate(n = n/128) %>% 
@@ -148,7 +148,7 @@ graficointe <- cerebros %>% select(intensidad_campo) %>%
 
 graficodiag <- cerebros %>% select(diag) %>%
   count(categ = diag) %>% mutate(n = n/128) %>% 
-  mutate(barras = as.factor(c(1, 2))) %>% mutate(v = "diagnóstico")
+  mutate(barras = as.factor(c(1, 2))) %>% mutate(v = "Diagnóstico")
 
 grafico <- rbind(graficores, graficosex, graficointe, graficodiag)
 

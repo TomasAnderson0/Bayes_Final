@@ -5,7 +5,6 @@ format: revealjs
 editor: visual
 ---
 
-
 ```{r}
 library(ggplot2)
 library(readr)
@@ -18,14 +17,10 @@ cerebros <- read_csv("cerebros.csv")
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = ifelse(intensidad_campo == 1.5, "1.5T", "3T"), sexo = ifelse(sexo == "female", "Femenino", "Masculino"))
 ```
 
-
-
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para ver si el diagnóstico es diferente según las variables demograficas se construyen los siguientes graficos:
-
 :::
 
 ```{r, fig.align='center'}
@@ -38,9 +33,7 @@ ggarrange(plot6, plot5)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para ver si el diagnóstico es diferente según las variables tecnologicas se construyen los siguientes graficos:
-
 :::
 
 ```{r, fig.align='center'}
@@ -48,12 +41,11 @@ plot7 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = intensidad_campo), posi
 plot8 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = resonador_fab), position = "dodge") + theme(legend.position = "top")
 ggarrange(plot7, plot8)
 ```
+
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para ver si las variables morfológicas varian según las variables demograficas se construyen los siguientes graficos:
-
 :::
 
 ```{r, fig.align='center'}
@@ -69,13 +61,10 @@ ggarrange(plot9, plot10, plot11, plot12)
 
 ```
 
-
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para ver si las variables morfológicas varian según las variables demograficas se construyen los siguientes graficos:
-
 :::
 
 ```{r, fig.align='center'}
@@ -93,14 +82,10 @@ plot16 = ggplot(cerebros) + geom_boxplot(aes(x = sexo, y = lh_cortex_fusiform_vo
 ggarrange(plot13, plot14, plot15, plot16)
 ```
 
-
-
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para ver si las variables morfológicas varian según las variables tecnologicas se construyen los siguientes graficos:
-
 :::
 
 ```{r, fig.align='center'}
@@ -118,13 +103,10 @@ plot20 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = lh_cortex
 ggarrange(plot17, plot18, plot19, plot20)
 ```
 
-
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para ver si las variables morfológicas varian según las variables tecnologicas se construyen los siguientes graficos:
-
 :::
 
 ```{r, fig.align='center'}
@@ -141,5 +123,3 @@ plot24 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_fu
   scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Fábrica del resonador")
 ggarrange(plot21, plot22, plot23, plot24)
 ```
-
-

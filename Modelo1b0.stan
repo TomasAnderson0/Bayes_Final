@@ -2,14 +2,14 @@ data {
   int<lower=0> N;
   int<lower=0, upper=1> diag[N];
   vector[N] age;
-  int sex[N];
+  vector[N] sex;
   vector[N] vhi;
   vector[N] vi;
   vector[N] ecsf;
   vector[N] vcf;
-  int inte[N];
-  int res1[N];
-  int res2[N];
+  vector[N] inte;
+  vector[N] res1;
+  vector[N] res2;
 }
 parameters {
   real b0;
@@ -34,7 +34,7 @@ model {
   b7 ~ normal(0, 1);
   b8 ~ normal(0, 1);
   b9 ~ normal(0, 1);
-  diag ~ bernoulli_logit(b0 + b1*age + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7*inte + b8*res1 + b9*res2);
+  diag ~ bernoulli_logit(b0 + b1*age + b2*sex + b3*vhi + b4*vi + b5*ecsf + b6*vcf + b7*inte + b8*res1 + b9*res2);
 }
 // generated quantities {
 //   vector[N] alpha;

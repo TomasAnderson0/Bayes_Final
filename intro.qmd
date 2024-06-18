@@ -4,6 +4,7 @@ controls: True
 format: revealjs
 editor: visual
 ---
+
 ## Introducción
 
 ```{r}
@@ -18,130 +19,95 @@ cerebros <- read_csv("cerebros.csv")
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = ifelse(intensidad_campo == 1.5, "1.5T", "3T"), sexo = ifelse(sexo == "female", "Femenino", "Masculino"))
 ```
 
-
-
 ::: {style="font-size: 87%;"}
-
 Cuando una persona llega a la vejez, el cerebro sufre cambios en su forma y tamaño, y ademas sus funciones cognitivas suelen verse deterioradas. Algunas de ellas son:
 
 ::: columns
 ::: {.column width="30%"}
-
-- Memoria
-- Reflejos
-
+-   Memoria
+-   Reflejos
 :::
+
 ::: {.column width="70%"}
-
-- Procesos de razonamiento
-- Capacidad de aprendizaje
-
+-   Procesos de razonamiento
+-   Capacidad de aprendizaje
 :::
 :::
 
 Cuando estos deterioros son mayores a los esperados para la edad, se habla de deterioro cognitivo leve (MCI) o de demencia incipiente. Este trastorno puede mantenerse durante varios años o puede transformarse en la Enfermedad de Alzheimer (AD), la causa mas habitual de demencia.
-
 :::
 
 ## Introducción
 
 ::: {style="font-size: 87%;"}
-
 La resonancia magnética es una técnica que permite generar imágenes detalladas de los órganos y tejidos dentro del cuerpo. En el caso del cerebro, permite obtener imágenes muy precisas de su estructura anatómica con una alta resolución espacial y un alto contraste entre los diferentes tipos de tejidos cerebrales, que favorece el uso de algoritmos de segmentación estructural, lo cual permite caracterizar propiedades morfométricas del cerebro.
-
 :::
 
 ## Introducción
 
 ::: {style="font-size: 87%;"}
-
 El Alzheimer se asocia a la acumulación progresiva de una proteína anormal en el cerebro, que causa daños neuronales. Los cambios neurobiológicos que causa, ocurren mucho antes de que los síntomas se presenten. El patrón característico de esta demencia incluye cambios morfológicos en algunas regiones del cerebro.
 
- El diagnóstico de estas enfermedades se hace juntando los síntomas clínicos que observa un neurólogo con la información extraida de las imágenes de resonancia magnética. El enfoque de análisis de las imágenes de resonancia magnética es esencialmente cualitativo: un/a especialista en imágenes compara el grado de atrofia que observa con el modelo mental que tiene del cerebro sano a esa edad.
-
-::: 
+El diagnóstico de estas enfermedades se hace juntando los síntomas clínicos que observa un neurólogo con la información extraida de las imágenes de resonancia magnética. El enfoque de análisis de las imágenes de resonancia magnética es esencialmente cualitativo: un/a especialista en imágenes compara el grado de atrofia que observa con el modelo mental que tiene del cerebro sano a esa edad.
+:::
 
 ## Introducción
 
 ::: {style="font-size: 87%;"}
-
 Dado que los cambios en el cerebro no son lineales con la edad y presentan gran variabilidad entre diferentes personas, sumado a que la progresión de una enfermedad neurodegenerativa no es igual en todos los pacientes, se vuelve difícil poder definir qué es normal y qué es patológico.
 
 Por lo tanto, en este informe se tratara de dilucidar que variables descriptas a continuación estan relacionadas con el diagnostico de la salud mental de la persona.
-
-::: 
-
+:::
 
 ## Datos
 
 ::: {style="font-size: 87%;"}
-
 Se cuentan con la siguiente información de 128 pacientes que se sometieron a diferentes estudios de resonancia magnética en diferentes partes del mundo.
-
 :::
 
 . . .
 
 ::: {style="font-size: 70%;"}
-
-
 ::: columns
+::: {.column width="50%"}
+-   Edad: Edad del paciente.
+-   Intensidad: Intensidad del campo magnético utilizado en la imagen, puede ser 3 T o 1.5 T
+-   Resonador: Marca del resonador magnético.
+-   Diagnostico: puede ser HC (control saludable), MCI (deterioro cognitivo leve) o AD (Enfermedad de Alzheimer).
+:::
 
 ::: {.column width="50%"}
-
-- Edad: Edad del paciente.
-- Intensidad: Intensidad del campo magnético utilizado en la imagen, puede ser 3 T o 1.5 T
-- Resonador: Marca del resonador magnético.
-- Diagnostico: puede ser HC (control saludable), MCI (deterioro cognitivo leve) o AD (Enfermedad de Alzheimer).
-
-:::
-::: {.column width="50%"}
-
-
-- Sexo
-- VHI: Volumen del hipocampo izquierdo (en mm³)
-- VI: Volumen intracraneal (en mm³)
-- ECSF: Espesor de la corteza superior frontal (en mm)
-- VCF: Volumen de la corteza fusiforme (en mm³)
-
+-   Sexo
+-   VHI: Volumen del hipocampo izquierdo (en mm³)
+-   VI: Volumen intracraneal (en mm³)
+-   ECSF: Espesor de la corteza superior frontal (en mm)
+-   VCF: Volumen de la corteza fusiforme (en mm³)
 :::
 :::
-
 :::
-
 
 ## Datos
 
 ::: {style="font-size: 87%;"}
-
-- Como MCI tiene solo 5 observaciones, se decide unir las categorias de MCI y AD para la variable diagnostico en una nueva llamada MCI&AD, la cual se interpreta como presencia de deterioro cognitivo patológico.   
-
+-   Como MCI tiene solo 5 observaciones, se decide unir las categorias de MCI y AD para la variable diagnostico en una nueva llamada MCI&AD, la cual se interpreta como presencia de deterioro cognitivo patológico.
 :::
 
 . . .
 
 ::: {style="font-size: 87%;"}
-
-- Ademas, las variables VHI y VCF se las divide por 1000, y VI por 100000 para tener numeros mas pequeños. Sus nuevas medidas son $cm^3$ para las primeras dos y 100 $cm^3$ para la última.
-
+-   Ademas, las variables VHI y VCF se las divide por 1000, y VI por 100000 para tener numeros mas pequeños. Sus nuevas medidas son $cm^3$ para las primeras dos y 100 $cm^3$ para la última.
 :::
-
 
 ## Objetivos
 
 ::: {style="font-size: 87%;"}
-
 -   Descubir que caracteristicas de las personas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
-
 :::
 
 ## Análisis exploratorio
 
-
 ::: {style="font-size: 87%;"}
-
 Las variables categoricas tienen las siguientes distribuciones marginales:
-
 :::
 
 ```{r, fig.align='center'}
@@ -178,11 +144,9 @@ ggplot() +
 
 ```
 
-
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-
 Para dimensionar las distribuciones de las variables cuantitativas, se presenta la siguiente tabla con estadisticas de ellas.
 
 ```{r, fig.align='center'}
@@ -206,7 +170,6 @@ matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, 
 rownames(matrices) = c("**Mínimo**", "**Q1**", "**Mediana**", "**Media**", "**Q3**", "**Máximo**")
 kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"), align = "c")
 ```
-
 :::
 
 ## Análisis exploratorio
@@ -226,6 +189,3 @@ plot4 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_fusiform_vol
 
 ggarrange(plot1, plot2, plot3, plot4)
 ```
-
-
-

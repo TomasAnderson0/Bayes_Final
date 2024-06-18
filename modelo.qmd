@@ -5,6 +5,15 @@ format: revealjs
 editor: visual
 ---
 
+```{r}
+library(rstan)
+library(readr)
+library(dplyr)
+load("modelob0.RData")
+```
+
+
+
 ## Descripción matematica
 
 ::: {style="font-size: 87%;"}
@@ -15,66 +24,183 @@ $$Y = \begin{cases}
 0 \text{ en caso contrario}
 \end{cases}$$
 
-Donde:  $\; \; \; \; \; \; \; \; Y_i|\pi_i \sim  Bernoulli(\pi_i) \; \; \; \;$  y  $\; \; \; \; E(Y_i) = \pi_i$
+Donde: $\; \; \; \; \; \; \; \; Y_i|\pi_i \sim Bernoulli(\pi_i) \; \; \; \;$ y $\; \; \; \; E(Y_i) = \pi_i$
 
 \
 
-Entonces, para pasar a modelar una recta en vez de la variable dicotomica, se aplica la función *logit* como función de enlace.   
-
+Entonces, para pasar a modelar una recta en vez de la variable dicotomica, se aplica la función *logit* como función de enlace.
 :::
 
 ## Descripción matematica
 
 ::: {style="font-size: 87%;"}
-
 Por lo que la nueva variable a modelar sera:
 
-$$Y^*_i=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$
-Entonces, se requiere plantear cuales son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide incluir todas las variables disponibles en el modelo.
-
-
+$$Y^*_i=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$ Entonces, se requiere plantear cuales son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide incluir todas las variables disponibles en el modelo.
 :::
-
 
 ## Modelo 1
 
 ::: {style="font-size: 87%;"}
-$$Y^*_i= \beta_0 + \beta_1 VHI_i + \beta_2 VI_i + \beta_3 ECSF_i + \beta_4 VCF_i +$$
-$$\beta_5 Sexo_i + \beta_6 Edad_i + \beta_7 Int_i + \beta_8 Res_{1i} + \beta_9 Res_{2i}$$
-Entonces, para estimar el modelo, primero se procede a elicitar los *priors* de cada parametro que lo conforma.
-
+$$Y^*_i= \beta_0 + \beta_1 VHI_i + \beta_2 VI_i + \beta_3 ECSF_i + \beta_4 VCF_i +$$ $$\beta_5 Sexo_i + \beta_6 Edad_i + \beta_7 Int_i + \beta_8 Res_{1i} + \beta_9 Res_{2i}$$ Entonces, para estimar el modelo, primero se procede a plantear los *priors* de cada parametro que lo conforma.
 :::
 
 ## Definición de priors
 
 TBA
 
-
 ## PP priori
 
 ## Ajuste y evaluación del modelo
 
-Se introducen los datos al modelo y utilizando HMC se estiman las distribuciones a *posteriori* de los parametros. La cadenas generadas fueron las siguientes:
+Se introducen los datos al modelo y utilizando HMC se estiman las distribuciones a *posteriori* de los parametros. Las cadenas generadas fueron las siguientes:
 
-
-```{r}
-extract(modelo1,c("b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8")) %>% 
-  setNames(c("Beta 1", "Beta 2", "Sigma", "Hora de la muerte", "5", "6", "7", "8")) %>%   
-  traceplot(pars = c("b1", "b2")) + labs(colour="Cadenas")
+```{r, eval=FALSE}
+modelob0 %>% 
+  setNames(c("Beta 0", "Beta 1", "Beta 2", "Beta 3", "Beta 4", "Beta 5", "Beta 6", "Beta 7", "Beta 8", "Beta 9", 1)) %>%   
+  traceplot(pars = c("b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9")) + labs(colour = "Cadenas")
 ```
 
+## Evaluación del modelo
 
-Todas tienen un $\hat{R}=1$, por lo que las distintas cadenas convergen a la
-misma distribución. Además, las trazas para cada cadena parece seguir un orden aleatorio
-por lo que se considera que la muestra extraída es representativa de la distribución del
-*posterior*. 
+Todas tienen un $\hat{R}=1$, por lo que las distintas cadenas convergen a la misma distribución. Además, las trazas para cada cadena parece seguir un orden aleatorio por lo que se considera que la muestra extraída es representativa de la distribución del *posterior*.
+
+
 
 ## Evaluación del modelo
 
 Algunas medidas de las muestras extraídas son:
 
-tabla
+```{r}
 
+
+b0_1 = extract(modelob0, "b0")[[1]]
+b1_1 = extract(modelob0, "b1")[[1]]
+b2_1 = extract(modelob0, "b2")[[1]]
+b3_1 = extract(modelob0, "b3")[[1]]
+b4_1 = extract(modelob0, "b4")[[1]]
+b5_1 = extract(modelob0, "b5")[[1]]
+b6_1 = extract(modelob0, "b6")[[1]]
+b7_1 = extract(modelob0, "b7")[[1]]
+b8_1 = extract(modelob0, "b8")[[1]]
+b9_1 = extract(modelob0, "b9")[[1]]
+
+b0_1_1 = quantile(b0_1,.025)
+b0_1_2 = mean(b0_1)
+b0_1_3 = quantile(b0_1,.975)
+b1_1_1 = quantile(b1_1,.025)
+b1_1_2 = mean(b1_1)
+b1_1_3 = quantile(b1_1,.975)
+b2_1_1 = quantile(b2_1,.025)
+b2_1_2 = mean(b2_1)
+b2_1_3 = quantile(b2_1,.975)
+b3_1_1 = quantile(b3_1,.025)
+b3_1_2 = mean(b3_1)
+b3_1_3 = quantile(b3_1,.975)
+b4_1_1 = quantile(b4_1,.025)
+b4_1_2 = mean(b4_1)
+b4_1_3 = quantile(b4_1,.975)
+b5_1_1 = quantile(b5_1,.025)
+b5_1_2 = mean(b5_1)
+b5_1_3 = quantile(b5_1,.975)
+b6_1_1 = quantile(b6_1,.025)
+b6_1_2 = mean(b6_1)
+b6_1_3 = quantile(b6_1,.975)
+b7_1_1 = quantile(b7_1,.025)
+b7_1_2 = mean(b7_1)
+b7_1_3 = quantile(b7_1,.975)
+b8_1_1 = quantile(b8_1,.025)
+b8_1_2 = mean(b8_1)
+b8_1_3 = quantile(b8_1,.975)
+b9_1_1 = quantile(b9_1,.025)
+b9_1_2 = mean(b9_1)
+b9_1_3 = quantile(b9_1,.975)
+
+
+
+
+```
+
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:20px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:20px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-gjpn{border-color:inherit;font-size:20px;text-align:left;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:right;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-gjpn">Parametros</th>
+    <th class="tg-gjpn">Estimación</th>
+    <th class="tg-gjpn">2.75%</th>
+    <th class="tg-gjpn">97.75%</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-gjpn">$\beta_0$</td>
+    <td class="tg-0pky">`r round(b0_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b0_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b0_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_1$</td>
+    <td class="tg-0pky">`r round(b1_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b1_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b1_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_2$</td>
+    <td class="tg-0pky">`r round(b2_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b2_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b2_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_3$</td>
+    <td class="tg-0pky">`r round(b3_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b3_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b3_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_4$</td>
+    <td class="tg-0pky">`r round(b4_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b4_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b4_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_5$</td>
+    <td class="tg-0pky">`r round(b5_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b5_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b5_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_6$</td>
+    <td class="tg-0pky">`r round(b6_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b6_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b6_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_7$</td>
+    <td class="tg-0pky">`r round(b7_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b7_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b7_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_8$</td>
+    <td class="tg-0pky">`r round(b8_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b8_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b8_1_3, 2)`</td>
+  </tr>
+  <tr>
+    <td class="tg-gjpn">$\beta_9$</td>
+    <td class="tg-0pky">`r round(b9_1_1, 2)`</td>
+    <td class="tg-0pky">`r round(b9_1_2, 2)`</td>
+    <td class="tg-0pky">`r round(b9_1_3, 2)`</td>
+  </tr>
+  <tr>
+</tbody></table>
 
 ## Distribucines a posteriori de los parametros
 
@@ -82,6 +208,42 @@ Una vez ajustado el modelo, se obtienen las siguientes distribuciones a *posteri
 
 ## Pruebas predictivas a posteriori
 
+## Modelo 2
 
 
+::: {style="font-size: 87%;"}
 
+
+Al ver que el efecto de las varibles tecnologicas cubren al 0 para su intervalo de credibilidad, se piensan como un efecto despreciable, por lo que se plantea un modelo sin ellas.
+
+$$Y^*_i= \beta_0 + \beta_1 VHI_i + \beta_2 VI_i + \beta_3 ECSF_i + \beta_4 VCF_i +$$ $$\beta_5 Sexo_i + \beta_6 Edad_i$$
+:::
+
+Entonces, utilizando los mismos priors, se procede a obtener las distribuciones a posteriori de los parametros.
+
+
+## Evaluación del modelo
+
+Las cadenas generadas fueron las siguientes:
+
+```{r, eval=FALSE}
+modelob0 %>% 
+  setNames(c("Beta 0", "Beta 1", "Beta 2", "Beta 3", "Beta 4", "Beta 5", "Beta 6")) %>%   
+  traceplot(pars = c("b0", "b1", "b2", "b3", "b4", "b5", "b6")) + labs(colour = "Cadenas")
+```
+
+## Evaluación del modelo
+
+Todas tienen un $\hat{R}=1$, por lo que las distintas cadenas convergen a la misma distribución. Además, las trazas para cada cadena parece seguir un orden aleatorio por lo que se considera que la muestra extraída es representativa de la distribución del *posterior*.
+
+## Evaluación del modelo
+
+Algunas medidas de las muestras extraídas son:
+
+
+## Distribucines a posteriori de los parametros
+
+Una vez ajustado el modelo, se obtienen las siguientes distribuciones a *posteriori*.
+
+
+## Pruebas predictivas a posteriori

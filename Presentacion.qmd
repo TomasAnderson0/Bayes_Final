@@ -1,0 +1,185 @@
+---
+title: "Untitled"
+controls: True
+format: revealjs
+editor: visual
+---
+
+## Introducción
+
+```{r}
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(kableExtra)
+library(ggpubr)
+library(ggmosaic)
+
+cerebros <- read_csv("cerebros.csv")
+cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = ifelse(intensidad_campo == 1.5, "1.5T", "3T"), sexo = ifelse(sexo == "female", "Femenino", "Masculino"))
+```
+
+::: {style="font-size: 87%;"}
+Cuando una persona llega a la vejez, el cerebro sufre cambios en su forma y tamaño, y ademas sus funciones cognitivas suelen verse deterioradas. Algunas de ellas son:
+
+::: columns
+::: {.column width="30%"}
+-   Memoria
+-   Reflejos
+:::
+
+::: {.column width="70%"}
+-   Procesos de razonamiento
+-   Capacidad de aprendizaje
+:::
+:::
+
+Cuando estos deterioros son mayores a los esperados para la edad, se habla de deterioro cognitivo leve (MCI) o de demencia incipiente. Este trastorno puede mantenerse durante varios años o puede transformarse en la Enfermedad de Alzheimer (AD), la causa mas habitual de demencia.
+:::
+
+## Introducción
+
+::: {style="font-size: 87%;"}
+Mediante resonancias magnéticas se puede generar imágenes detalladas del cerebro con un alto contraste entre los diferentes tipos de tejidos cerebrales que permite caracterizar sus propiedades morfométricas a traves de algoritmos de segmentación estructural.
+
+ Los cambios neurobiológicos que causa el Alzheimer, ocurren mucho antes de que los síntomas se presenten, tal como cambios morfológicos en algunas regiones del cerebro. El diagnóstico de estas enfermedades es esencialmente cualitativo: un/a especialista compara el grado de atrofia que observa en la resonancia magnética con el modelo mental que tiene de un cerebro sano a esa edad.
+:::
+
+
+## Introducción
+
+::: {style="font-size: 87%;"}
+Dado que los cambios en el cerebro no son lineales con la edad y presentan gran variabilidad entre diferentes personas, sumado a que la progresión de una enfermedad neurodegenerativa no es igual en todos los pacientes, se vuelve difícil poder definir qué es normal y qué es patológico.
+
+Por lo tanto, en este informe se tratara de dilucidar que variables descriptas a continuación estan relacionadas con el diagnostico de la salud mental de la persona.
+:::
+
+## Datos
+
+::: {style="font-size: 87%;"}
+Se cuentan con la siguiente información de 128 pacientes que se sometieron a diferentes estudios de resonancia magnética en diferentes partes del mundo.
+:::
+
+. . .
+
+::: {style="font-size: 70%;"}
+::: columns
+::: {.column width="50%"}
+-   Edad: Edad del paciente.
+-   Intensidad: Intensidad del campo magnético utilizado en la imagen, puede ser 3 T o 1.5 T
+-   Resonador: Marca del resonador magnético.
+-   Diagnostico: puede ser HC (control saludable), MCI (deterioro cognitivo leve) o AD (Enfermedad de Alzheimer).
+:::
+
+::: {.column width="50%"}
+-   Sexo
+-   VHI: Volumen del hipocampo izquierdo (en mm³)
+-   VI: Volumen intracraneal (en mm³)
+-   ECSF: Espesor de la corteza superior frontal (en mm)
+-   VCF: Volumen de la corteza fusiforme (en mm³)
+:::
+:::
+:::
+
+## Objetivos
+
+\
+
+
+
+::: {style="font-size: 87%;"}
+-   Descubir que caracteristicas de las personas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
+
+:::
+. . .
+
+\
+::: {style="font-size: 87%;"}
+
+
+-   Ver la asociaciones entre las variables demograficas y tecnologicas con las morfologicas.
+:::
+
+
+## Datos
+
+::: {style="font-size: 87%;"}
+-   Como el analisis del diagnostico esta centrado en si el paciente desarrollo o no una enfermedad neurodegenerativa, se decide unir las categorias de MCI y AD en una nueva llamada MCI&AD, la cual se interpreta como presencia de deterioro cognitivo patológico.
+:::
+
+. . .
+
+::: {style="font-size: 87%;"}
+-   Ademas, las variables VHI y VCF se las divide por 1000, y VI por 100000 para tener una escala mas chica, ya que esto mejora el rendimiento de los metodos de muestreo. Sus nuevas medidas son $cm^3$ para las primeras dos y 100 $cm^3$ para la última.
+:::
+
+
+
+## Análisis exploratorio
+
+::: {style="font-size: 87%;"}
+Las variables categoricas tienen las siguientes distribuciones marginales:
+:::
+
+```{r, fig.align='center'}
+graficores <- cerebros %>% select(resonador_fab) %>%
+  count(categ = resonador_fab) %>% mutate(n = n*100/128) %>% 
+  mutate(barras = as.factor(c(3, 2, 1))) %>% mutate(v = "Resonador")
+
+graficosex <- cerebros %>% select(sexo) %>%
+  count(categ = sexo) %>% mutate(n = n*100/128) %>% 
+  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo") %>% mutate(categ = ifelse(categ == "Masculino", "Masculino", "Femenino"))
+
+graficointe <- cerebros %>% select(intensidad_campo) %>%
+  count(categ = intensidad_campo) %>% mutate(n = n*100/128) %>% 
+  mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Intensidad")
+
+graficodiag <- cerebros %>% select(diag) %>%
+  count(categ = diag) %>% mutate(n = n*100/128) %>% 
+  mutate(barras = as.factor(c(1, 2))) %>% mutate(v = "Diagnóstico")
+
+grafico <- rbind(graficores, graficosex, graficointe, graficodiag)
+
+ggplot() + 
+  geom_bar(data = grafico ,aes(x = v, y = n, fill = barras), stat = "identity") +
+  scale_fill_manual(values = c("#168168", "#38A38A", "#5AC5AC")) +
+  geom_text(data = grafico, aes(x = v, y = c(10, 32, 70,
+                                             25, 75,
+                                             25, 75,
+                                             75, 25),
+                                label = categ), 
+            vjust = -0.5, size = 6, color = "white") + 
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(y = "Porcentaje", x = "Variable")
+
+```
+
+## Análisis exploratorio
+
+::: {style="font-size: 87%;"}
+Para dimensionar las distribuciones de las variables cuantitativas, se presenta la siguiente tabla con estadisticas de ellas.
+
+```{r, fig.align='center'}
+sumary = summary(cerebros[,c(4,7:10)])
+
+
+texto1 = gsub("Min.   :", "", sumary[1,])
+minimo = round(as.numeric(texto1), 2)
+texto2 = gsub("1st Qu.:", "", sumary[2,])
+q1 = round(as.numeric(texto2), 2)
+texto3 = gsub("Median :", "", sumary[3,])
+mediana = round(as.numeric(texto3), 2)
+texto4 = gsub("Mean   :", "", sumary[4,])
+media = round(as.numeric(texto4), 2)
+texto5 = gsub("3rd Qu.:", "", sumary[5,])
+q3 = round(as.numeric(texto5), 2)
+texto6 = gsub("Max.   :", "", sumary[6,])
+maximo = round(as.numeric(texto6), 2)
+
+matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, byrow = T)
+rownames(matrices) = c("**Mínimo**", "**Q1**", "**Mediana**", "**Media**", "**Q3**", "**Máximo**")
+kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"), align = "c")
+```
+
+:::

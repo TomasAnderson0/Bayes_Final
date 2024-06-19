@@ -14,10 +14,12 @@ model {
 generated quantities {
   vector[N] mu;
   vector[N] y_rep;
+  vector[N] log_lik;
 
-  mu = beta0 + beta1 * ver;
+  mu = beta0 + beta1 * edad;
 
   for (i in 1:N) {
     y_rep[i] = normal_rng(mu[i], sigma);
+    log_lik[i] = normal_lpdf(ver[i] | mu[i], sigma);
   }
 }

@@ -24,6 +24,8 @@ reglin_edadxVHI <- stan(
   seed = 1997
 )
 
+reglin_edadxVHI
+
 posteriorVHI <- extract(reglin_edadxVHI, c("beta0", "beta1", "sigma"))
 
 # ------------- grafico
@@ -101,7 +103,7 @@ mu_mean <- apply(mu_matrix, 2, mean)
 mu_qts <- t(apply(mu_matrix, 2, function(x) quantile(x, c(0.025, 0.975))))
 mu_qts2 <- t(apply(mu_matrix, 2, function(x) quantile(x, c(0.25, 0.75))))
 
-# Finalmente, se lamacenan los valores calculados en un data frame
+
 data_mu <- data.frame(
   x = x_grid, 
   y = mu_mean,
@@ -114,7 +116,7 @@ data_mu <- data.frame(
 ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
-    fill = "grey50",
+    fill = "#115050",
     alpha = 0.6,
     data = data_mu
   ) +
@@ -130,7 +132,7 @@ ggplot(cerebros) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen Intracraneal⠀",(100cm^{3}))))
+  labs(x = "Edad", y = expression(paste("Volumen Intracraneal (100",cm^{3})))
 
 # ------------------------------- ECSF ----------------------------
 

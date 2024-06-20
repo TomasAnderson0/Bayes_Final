@@ -1,8 +1,11 @@
 ---
 title: "Untitled"
 controls: True
-format: revealjs
+format: 
+  revealjs:
+    slide-number: TRUE
 editor: visual
+
 ---
 
 ```{r, error=FALSE}
@@ -15,6 +18,44 @@ library(ggmosaic)
 
 cerebros <- read_csv("cerebros.csv")
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = factor(ifelse(intensidad_campo == 1.5, "1.5T", "3T"), levels = c("3T", "1.5T")), sexo = factor(ifelse(sexo == "female", "Femenino", "Masculino"), levels = c("Masculino", "Femenino")), resonador_fab = factor(resonador_fab, levels = c("Siemens", "Philips", "GE")))
+```
+
+## Análisis exploratorio
+
+::: {style="font-size: 87%;"}
+Para ver si las variables morfológicas varian según las variables demograficas se construyen los siguientes graficos:
+:::
+
+```{r, fig.align='center'}
+load("Graficos_edad_morf.RData")
+
+ggarrange(edadxvhi, edadxvi, edadxecsf, edadxvcf, common.legend = TRUE, legend="top")
+
+```
+
+## Análisis exploratorio
+
+::: {style="font-size: 87%;"}
+
+Para ver si el diagnóstico es diferente según las variables morfologicas se construyen los siguientes graficos:
+
+:::
+
+```{r}
+plot29 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_subcx_hippocampus_volume), fill = "#168168" ) +
+  scale_y_continuous(name = "VHI") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+
+plot30 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = xh_general_etiv_volume), fill = "#168168")+
+  scale_y_continuous(name = "VI") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+
+plot31 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_superiorfrontal_thickness), fill = "#168168")+
+  scale_y_continuous(name = "ECSF") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+
+plot32 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_fusiform_volume), fill = "#168168")+
+  scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+
+ggarrange(plot29, plot30, plot31, plot32)
+
 ```
 
 ## Análisis exploratorio
@@ -69,24 +110,7 @@ geom_text(x = 2, y = .27, label = "GE", color = "#FFFFFF", size = 6) +
 ggarrange(plot7, plot8)
 ```
 
-## Análisis exploratorio
 
-::: {style="font-size: 87%;"}
-Para ver si las variables morfológicas varian según las variables demograficas se construyen los siguientes graficos:
-:::
-
-```{r, fig.align='center', eval = FALSE}
-plot9 = ggplot(cerebros) + geom_point(aes(x = edad, y = lh_subcx_hippocampus_volume))+
-  scale_y_continuous(name = "VHI") + scale_x_continuous(name = "Edad") + theme_minimal()
-plot10 = ggplot(cerebros) + geom_point(aes(x = edad, y = xh_general_etiv_volume))+
-  scale_y_continuous(name = "VI") + scale_x_continuous(name = "Edad") + theme_minimal()
-plot11 = ggplot(cerebros) + geom_point(aes(x = edad, y = lh_cortex_superiorfrontal_thickness))+
-  scale_y_continuous(name = "ECSF") + scale_x_continuous(name = "Edad") + theme_minimal()
-plot12 = ggplot(cerebros) + geom_point(aes(x = edad, y = lh_cortex_fusiform_volume))+
-  scale_y_continuous(name = "VCF") + scale_x_continuous(name = "Edad") + theme_minimal()
-ggarrange(plot9, plot10, plot11, plot12)
-
-```
 
 ## Análisis exploratorio
 
@@ -168,30 +192,7 @@ plot28 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = edad), fi
 ggarrange(plot25, plot26, plot27, plot28)
 ```
 
-## Análisis exploratorio
 
-::: {style="font-size: 87%;"}
-
-Para ver si el diagnóstico es diferente según las variables morfologicas se construyen los siguientes graficos:
-
-:::
-
-```{r}
-plot29 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_subcx_hippocampus_volume), fill = "#168168" ) +
-  scale_y_continuous(name = "VHI") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
-
-plot30 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = xh_general_etiv_volume), fill = "#168168")+
-  scale_y_continuous(name = "VI") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
-
-plot31 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_superiorfrontal_thickness), fill = "#168168")+
-  scale_y_continuous(name = "ECSF") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
-
-plot32 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_fusiform_volume), fill = "#168168")+
-  scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
-
-ggarrange(plot29, plot30, plot31, plot32)
-
-```
 ## Titulo
 
 ::: {style="font-size: 87%;"}

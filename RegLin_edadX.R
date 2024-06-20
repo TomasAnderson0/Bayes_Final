@@ -50,7 +50,7 @@ data_mu <- data.frame(
   upper_50 = mu_qts2[, 2]
 )
 
-ggplot(cerebros) +
+edadxvhi = ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
     fill = "grey50",
@@ -71,7 +71,7 @@ ggplot(cerebros) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen del Hipocampo Izquierdo⠀ ", (cm^{3}))),
+  labs(x = "Edad", y = expression(paste("VHI⠀ ", (cm^{3}))),
        color = "Diagnóstico") + theme_minimal()
 
 
@@ -116,7 +116,7 @@ data_mu <- data.frame(
   upper_50 = mu_qts2[, 2]
 )
 
-ggplot(cerebros) +
+edadxvi = ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
     fill = "grey50",
@@ -137,7 +137,7 @@ alpha = 0.6, size = 2) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen Intracraneal (100 ",cm^{3})),
+  labs(x = "Edad", y = expression(paste("VI (100 ",cm^{3}, ")")),
        color = "Diagnóstico") + theme_minimal()
 
 # ------------------------------- ECSF ----------------------------
@@ -182,7 +182,7 @@ data_mu <- data.frame(
   upper_50 = mu_qts2[, 2]
 )
 
-ggplot(cerebros) +
+edadxecsf = ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
     fill = "grey50",
@@ -203,7 +203,7 @@ ggplot(cerebros) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Espesor de la Corteza Superior Frontal (mm)")),
+  labs(x = "Edad", y = expression(paste("ECSF (mm)")),
        color = "Diagnóstico") + theme_minimal()
 
 # --------------------------- VCF -------------------------------
@@ -247,7 +247,7 @@ data_mu <- data.frame(
   upper_50 = mu_qts2[, 2]
 )
 
-ggplot(cerebros) +
+edadxvcf = ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
     fill = "grey50",
@@ -268,5 +268,8 @@ ggplot(cerebros) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen de la Corteza Fusiforme⠀", (cm^{3}))),
+  labs(x = "Edad", y = expression(paste("VCF⠀", (cm^{3}))),
        color = "Diagnóstico") + theme_minimal()
+
+
+save(edadxvhi, edadxvi, edadxecsf ,edadxvcf, file = "Graficos_edad_morf.RData")

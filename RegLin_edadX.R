@@ -71,7 +71,30 @@ edadxvhi = ggplot(cerebros) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("VHI⠀ ", (cm^{3}))),
+  labs(x = "Edad", y = expression(paste("VHI⠀", (cm^{3}))),
+       color = "Diagnóstico") + theme_minimal()
+
+edadxvhi2 = ggplot(cerebros) +
+  geom_ribbon(
+    aes(x, ymin = lower_95, ymax = upper_95),
+    fill = "grey50",
+    alpha = 0.8,
+    data = data_mu
+  ) +
+  geom_ribbon(
+    aes(x, ymin = lower_50, ymax = upper_50),
+    fill = "grey35",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_point(aes(x = edad, y = lh_subcx_hippocampus_volume/1000), color = "#232323", size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
+  geom_line(
+    aes(x, y), 
+    color = "firebrick",
+    data = data_mu
+  ) +
+  labs(x = "Edad", y = expression(paste("VHI⠀", (cm^{3}))),
        color = "Diagnóstico") + theme_minimal()
 
 
@@ -140,6 +163,31 @@ alpha = 0.6, size = 2) +
   labs(x = "Edad", y = expression(paste("VI (100 ",cm^{3}, ")")),
        color = "Diagnóstico") + theme_minimal()
 
+
+edadxvi2 = ggplot(cerebros) +
+  geom_ribbon(
+    aes(x, ymin = lower_95, ymax = upper_95),
+    fill = "grey50",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_ribbon(
+    aes(x, ymin = lower_50, ymax = upper_50),
+    fill = "grey35",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_point(aes(x = edad, y = xh_general_etiv_volume/100000), color = "#232323", size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
+  geom_line(
+    aes(x, y), 
+    color = "firebrick",
+    data = data_mu
+  ) +
+  labs(x = "Edad", y = expression(paste("VI (100 ",cm^{3}, ")")),
+       color = "Diagnóstico") + theme_minimal()
+
+
 # ------------------------------- ECSF ----------------------------
 
 lista <- list(N = nrow(cerebros),
@@ -206,6 +254,31 @@ edadxecsf = ggplot(cerebros) +
   labs(x = "Edad", y = expression(paste("ECSF (mm)")),
        color = "Diagnóstico") + theme_minimal()
 
+edadxecsf2 = ggplot(cerebros) +
+  geom_ribbon(
+    aes(x, ymin = lower_95, ymax = upper_95),
+    fill = "grey50",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_ribbon(
+    aes(x, ymin = lower_50, ymax = upper_50),
+    fill = "grey35",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_point(aes(x = edad, y = lh_cortex_superiorfrontal_thickness ), color = "#232323", size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
+  geom_line(
+    aes(x, y), 
+    color = "firebrick",
+    data = data_mu
+  ) +
+  labs(x = "Edad", y = expression(paste("ECSF (mm)")),
+       color = "Diagnóstico") + theme_minimal()
+
+
+
 # --------------------------- VCF -------------------------------
 
 lista <- list(N = nrow(cerebros),
@@ -271,5 +344,30 @@ edadxvcf = ggplot(cerebros) +
   labs(x = "Edad", y = expression(paste("VCF⠀", (cm^{3}))),
        color = "Diagnóstico") + theme_minimal()
 
+edadxvcf2 = ggplot(cerebros) +
+  geom_ribbon(
+    aes(x, ymin = lower_95, ymax = upper_95),
+    fill = "grey50",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_ribbon(
+    aes(x, ymin = lower_50, ymax = upper_50),
+    fill = "grey35",
+    alpha = 0.6,
+    data = data_mu
+  ) +
+  geom_point(aes(x = edad, y = lh_cortex_fusiform_volume/1000), color = "#232323",
+             size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
+  geom_line(
+    aes(x, y), 
+    color = "firebrick",
+    data = data_mu
+  ) +
+  labs(x = "Edad", y = expression(paste("VCF⠀", (cm^{3}))),
+       color = "Diagnóstico") + theme_minimal()
 
-save(edadxvhi, edadxvi, edadxecsf ,edadxvcf, file = "Graficos_edad_morf.RData")
+
+
+save(edadxvhi, edadxvi, edadxecsf , edadxvcf, edadxvhi2, edadxvi2, edadxecsf2, edadxvcf2, file = "Graficos_edad_morf.RData")

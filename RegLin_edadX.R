@@ -54,7 +54,7 @@ ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
     fill = "grey50",
-    alpha = 0.6,
+    alpha = 0.8,
     data = data_mu
   ) +
   geom_ribbon(
@@ -63,13 +63,16 @@ ggplot(cerebros) +
     alpha = 0.6,
     data = data_mu
   ) +
-  geom_point(aes(x = edad, y = lh_subcx_hippocampus_volume/1000), alpha = 0.6, size = 2) +
+  geom_point(aes(x = edad, y = lh_subcx_hippocampus_volume/1000, color = diag),
+             alpha = 0.6, size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
   geom_line(
     aes(x, y), 
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen del Hipocampo Izquierdo⠀", (cm^{3}))))
+  labs(x = "Edad", y = expression(paste("Volumen del Hipocampo Izquierdo⠀ ", (cm^{3}))),
+       color = "Diagnóstico") + theme_minimal()
 
 
 # ------------------------------ VI ---------------------------------------
@@ -116,7 +119,7 @@ data_mu <- data.frame(
 ggplot(cerebros) +
   geom_ribbon(
     aes(x, ymin = lower_95, ymax = upper_95),
-    fill = "#115050",
+    fill = "grey50",
     alpha = 0.6,
     data = data_mu
   ) +
@@ -126,13 +129,16 @@ ggplot(cerebros) +
     alpha = 0.6,
     data = data_mu
   ) +
-  geom_point(aes(x = edad, y = xh_general_etiv_volume/100000), alpha = 0.6, size = 2) +
+  geom_point(aes(x = edad, y = xh_general_etiv_volume/100000, color = diag),
+alpha = 0.6, size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
   geom_line(
     aes(x, y), 
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen Intracraneal (100",cm^{3})))
+  labs(x = "Edad", y = expression(paste("Volumen Intracraneal (100 ",cm^{3})),
+       color = "Diagnóstico") + theme_minimal()
 
 # ------------------------------- ECSF ----------------------------
 
@@ -189,13 +195,16 @@ ggplot(cerebros) +
     alpha = 0.6,
     data = data_mu
   ) +
-  geom_point(aes(x = edad, y = lh_cortex_superiorfrontal_thickness), alpha = 0.6, size = 2) +
+  geom_point(aes(x = edad, y = lh_cortex_superiorfrontal_thickness, color = diag),
+             alpha = 0.6, size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
   geom_line(
     aes(x, y), 
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Espesor de la Corteza Superior Frontal (mm)")))
+  labs(x = "Edad", y = expression(paste("Espesor de la Corteza Superior Frontal (mm)")),
+       color = "Diagnóstico") + theme_minimal()
 
 # --------------------------- VCF -------------------------------
 
@@ -251,10 +260,13 @@ ggplot(cerebros) +
     alpha = 0.6,
     data = data_mu
   ) +
-  geom_point(aes(x = edad, y = lh_cortex_fusiform_volume/1000), alpha = 0.6, size = 2) +
+  geom_point(aes(x = edad, y = lh_cortex_fusiform_volume/1000, color = diag),
+             alpha = 0.6, size = 2) +
+  scale_colour_manual(values = c("#1A9C5A", "#DE4627")) +
   geom_line(
     aes(x, y), 
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("Volumen de la Corteza Fusiforme⠀", (cm^{3}))))
+  labs(x = "Edad", y = expression(paste("Volumen de la Corteza Fusiforme⠀", (cm^{3}))),
+       color = "Diagnóstico") + theme_minimal()

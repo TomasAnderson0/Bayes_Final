@@ -1,6 +1,13 @@
 library(rstan)
 library(readr)
 library(dplyr)
+library(ggplot2)
+
+cerebros <- read_csv("cerebros.csv")
+cerebros$diag = factor(cerebros$diag, levels = c("HC", "MCI", "AD"))
+cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"))
+cerebros <- cerebros %>% mutate(res1 = ifelse(resonador_fab == "GE", 1, 0)) %>% 
+  mutate(res2 = ifelse(resonador_fab == "Philips", 1, 0))
 
 lista <- list(N = nrow(cerebros),
               edad = cerebros$edad,
@@ -21,7 +28,7 @@ modeloregcomp <- stan(
   seed = 1997
 )
 
-posteriorcomp <- data.frame(extract(modeloregcomp, c("beta3", "beta4", "beta5")))
+posteriorcomp <- data.frame(extract(modeloregcomp, c("beta1", "beta2", "beta3", "beta4", "beta5")))
 
 ggplot(posteriorcomp) + geom_density(aes(x = beta5))
 

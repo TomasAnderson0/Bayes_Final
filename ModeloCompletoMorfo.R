@@ -35,8 +35,9 @@ posteriorcomp <- data.frame(b1 = c(posteriorcomp$beta1, posteriorcomp$beta2, pos
 posteriorcomp <- posteriorcomp %>% 
   mutate(variable = c(rep("Edad", 5400), rep("Sexo", 5400), rep("Resonador GE", 5400), rep("Resonador Philips", 5400), rep("Intensidad", 5400)))
 
-ggplot(posteriorcomp) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = "#057057") + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
+reglin1 = ggplot(posteriorcomp) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#F32835","#F32835","#057057")) + 
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal() +
+  ggtitle("VHI") + theme(plot.title = element_text(hjust = .5))
 
 
 # ---------------------------------------------------------------------
@@ -67,8 +68,9 @@ posteriorcomp2 <- data.frame(b1 = c(posteriorcomp2$beta1, posteriorcomp2$beta2, 
 posteriorcomp2 <- posteriorcomp2 %>% 
   mutate(variable = c(rep("Edad", 5400), rep("Sexo", 5400), rep("Resonador GE", 5400), rep("Resonador Philips", 5400), rep("Intensidad", 5400)))
 
-ggplot(posteriorcomp2) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#F32835","#F32835","#F32835","#F32835","#057057")) + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
+reglin2 = ggplot(posteriorcomp2) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#F32835","#F32835","#F32835","#F32835","#057057")) + 
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal() +
+  ggtitle("VI") + theme(plot.title = element_text(hjust = .5))
 
 # --------------------------------------------------------------
 
@@ -100,8 +102,9 @@ posteriorcomp3 <- data.frame(b1 = c(posteriorcomp3$beta1, posteriorcomp3$beta2, 
 posteriorcomp3 <- posteriorcomp3 %>% 
   mutate(variable = c(rep("Edad", 5400), rep("Sexo", 5400), rep("Resonador GE", 5400), rep("Resonador Philips", 5400), rep("Intensidad", 5400)))
 
-ggplot(posteriorcomp3) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#F32835","#F32835","#F32835")) + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
+reglin3 = ggplot(posteriorcomp3) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#F32835","#F32835","#F32835")) + 
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal() +
+  ggtitle("ECSF") + theme(plot.title = element_text(hjust = .5))
 
 # ---------------------------------------------------------------------------------
 
@@ -131,7 +134,8 @@ posteriorcomp4 <- data.frame(b1 = c(posteriorcomp4$beta1, posteriorcomp4$beta2, 
 posteriorcomp4 <- posteriorcomp4 %>% 
   mutate(variable = c(rep("Edad", 5400), rep("Sexo", 5400), rep("Resonador GE", 5400), rep("Resonador Philips", 5400), rep("Intensidad", 5400)))
 
-ggplot(posteriorcomp4) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#F32835","#F32835","#057057")) + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
+reglin4 = ggplot(posteriorcomp4) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#F32835","#F32835","#057057")) + 
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal() +
+  ggtitle("VCF") + theme(plot.title = element_text(hjust = .5))
 
-
+save(reglin1, reglin2, reglin3, reglin4, file = "reglin.RData")

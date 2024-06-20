@@ -11,19 +11,21 @@ editor: visual
 ```{r, error=FALSE}
 library(ggplot2)
 library(readr)
-library(tidyverse)
+library(dplyr)
 library(kableExtra)
 library(ggpubr)
-library(ggmosaic)
+
 
 cerebros <- read_csv("cerebros.csv")
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = factor(ifelse(intensidad_campo == 1.5, "1.5T", "3T"), levels = c("3T", "1.5T")), sexo = factor(ifelse(sexo == "female", "Femenino", "Masculino"), levels = c("Masculino", "Femenino")), resonador_fab = factor(resonador_fab, levels = c("Siemens", "Philips", "GE")))
 ```
 
+
+
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Primero se observa si las variables tecnologicas estan relacionadas con las demas variables.
+Entonces se observa si las variables tecnologicas estan relacionadas con las demas variables.
 :::
 
 ```{r, fig.align='center'}
@@ -78,6 +80,13 @@ plot26 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = edad), fill 
 ggarrange(plot25, plot26)
 ```
 
+## Análisis exploratorio
+
+```{r}
+ggplot(cerebros) + geom_bar(aes(x = as.factor(resonador_fab), fill = as.factor(intensidad_campo)), position = "fill") + scale_fill_manual( values = c("#168168", "#38A38A", "#5AC5AC")) +  scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") + theme_minimal() + labs(fill = "Intensidad")
+```
+
+
 
 ## Análisis exploratorio
 
@@ -126,10 +135,17 @@ $$Y_{i}|\mu_{i},\sigma^2 \sim N(\mu_{i},\sigma^2) $$
 Donde: 
 
 $$\mu_{ij}= \beta_0 +\beta_{E} \cdot x_{Edad_i} + \beta_{M} \cdot x_{Masculino_i} + \\  \beta_{I} \cdot x_{3T_i}+ \beta_{G} \cdot x_{GE_i}+ \beta_{P} \cdot x_{Philips_i} $$
+Como el objetivo es describir los datos, se utilizan *priors* uniformes.
+
 :::
 
 ## Titulo
 
+```{r}
+load("reglin.RData")
+
+ggarrange(reglin1,reglin2,reglin3,reglin4)
+```
 
 
 
@@ -178,7 +194,7 @@ Para ver si el diagnóstico es diferente según las variables demograficas se co
 :::
 
 ```{r, fig.align='center'}
-plot5 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = sexo), position = "fill") + scale_fill_manual(values = c("#168168", "#38A38A")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Porcentaje") +   geom_text(x = 1, y = .75, label = "Masculino", color = "#FFFFFF", size = 6) +
+plot5 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = sexo), position = "fill") + scale_fill_manual(values = c("#168168", "#38A38A")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") +   geom_text(x = 1, y = .75, label = "Masculino", color = "#FFFFFF", size = 6) +
 geom_text(x = 1, y = .25, label = "Femenino", color = "#FFFFFF", size = 6) +
 geom_text(x = 2, y = .75, label = "Masculino", color = "#FFFFFF", size = 6) +
 geom_text(x = 2, y = .25, label = "Femenino", color = "#FFFFFF", size = 6)  + ggtitle("Sexo")+
@@ -199,7 +215,7 @@ Para ver si el diagnóstico es diferente según las variables tecnologicas se co
 :::
 
 ```{r, fig.align='center'}
-plot7 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = intensidad_campo), position = "fill") + theme(legend.position = "top") + scale_fill_manual(values = c("#168168", "#38A38A")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Porcentaje") +
+plot7 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = intensidad_campo), position = "fill") + theme(legend.position = "top") + scale_fill_manual(values = c("#168168", "#38A38A")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") +
 geom_text(x = 1, y = .6, label = "3T", color = "#FFFFFF", size = 6) +
 geom_text(x = 1, y = .10, label = "1.5T", color = "#FFFFFF", size = 6) +
 geom_text(x = 2, y = .87, label = "3T", color = "#FFFFFF", size = 6) +
@@ -210,7 +226,7 @@ theme_minimal() + ggtitle("Intensidad") +
   theme(legend.position = "none") 
 
 
-plot8 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = resonador_fab), position = "fill") + theme(legend.position = "top")+ scale_fill_manual(values = c("#168168", "#38A38A", "#5AC5AC")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Porcentaje") + 
+plot8 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = resonador_fab), position = "fill") + theme(legend.position = "top")+ scale_fill_manual(values = c("#168168", "#38A38A", "#5AC5AC")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") + 
   geom_text(x = 1, y = .6, label = "Siemens", color = "#FFFFFF", size = 6) +
 geom_text(x = 1, y = .155, label = "Philips", color = "#FFFFFF", size = 6) +
 geom_text(x = 2, y = .87, label = "Siemens", color = "#FFFFFF", size = 6) +
@@ -227,27 +243,6 @@ ggarrange(plot7, plot8)
 
 
 
-
-
-
-## Titulo
-
-::: {style="font-size: 87%;"}
-
-Para ver las asociaciones entre las variables morfologicas con las demas, se plantea un modelo bayesiano de regresión lineal.
-
-
-
-$$y_{ij}= \mu_{i} + \eta_i \ \ \ con \ \ \  i=\overline{\text{1,128}} \ \ y \ \ j=\overline{\text{1,4}}$$
-
-Donde: 
-
-$$\mu_{i}= \beta_0 +\beta_{E} \cdot x_{iEdad} + \beta_{S} \cdot x_{iSexo} + \\  \beta_{I} \cdot x_{iInt}+ \beta_{R1} \cdot x_{iRes1}+ \beta_{R2} \cdot x_{iRes2}$$
-
-
-$$\eta_i \sim N(0,\sigma^2)  \\  Y_{ij} \sim N(\mu_{i},\sigma^2) $$
-
-:::
 
 
 

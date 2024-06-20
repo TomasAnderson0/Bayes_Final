@@ -63,11 +63,14 @@ ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = edad))
 
 #Int*Resonador
 IR1 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Siemens")
-IR2 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Siemens")
+IR2 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "Siemens")
 IR4 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "Philips")
 IR5 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "Philips")
-IR7 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "GE")          
+IR7 = sum(cerebros$intensidad_campo == 1.5 & cerebros$resonador_fab == "GE")          
 IR8 = sum(cerebros$intensidad_campo == 3 & cerebros$resonador_fab == "GE")       
+
+IR = matrix(c(IR1, IR2, IR4, IR5, IR7, IR8), nrow = 2, byrow = F)
+kable(IR)
 
 matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, byrow = T)
 rownames(matrices) = c("Mínimo", "Q1", "Mediana", "Media", "Q3", "Máximo")
@@ -189,5 +192,7 @@ ggplot() +
   theme_minimal() +
   theme(legend.position = "none") +
   labs(y = "Porcentaje", x = "Variable")
+
+
 
 

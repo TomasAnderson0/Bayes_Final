@@ -265,20 +265,32 @@ lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
               age = cerebros$edad,
               vhi = cerebros$lh_subcx_hippocampus_volume,
-              inte = (as.numeric(as.factor(cerebros$intensidad_campo))-1)
+              inte = (as.numeric(as.factor(cerebros$intensidad_campo))-1),
+              axv = cerebros$edad * cerebros$lh_subcx_hippocampus_volume,
+              vxi = cerebros$lh_subcx_hippocampus_volume * (as.numeric(as.factor(cerebros$intensidad_campo))-1),
+              axi = (as.numeric(as.factor(cerebros$intensidad_campo))-1) * cerebros$edad)
+
+
+init_list <- list(
+  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
+  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
+  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
+  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0)
 )
+
 
 modeloMulti3 <- stan(
   file = "RegLogMultivarInterac.stan",
   data = lista,
   chains = 4,
+  init = init_list,
   warmup = 150,
   iter = 1500,
   control = list(adapt_delta = 0.99),
   seed = 1997
 )
 
-looM3 <- loo(modeloMulti3)
+traceplot(modeloMulti3)
 
 
 

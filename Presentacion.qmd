@@ -87,18 +87,24 @@ Se cuentan con la siguiente información de 128 pacientes que se sometieron a di
 
 
 
-::: {style="font-size: 87%;"}
--   Descubir que caracteristicas de las personas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
 
-:::
-. . .
 
-\
 ::: {style="font-size: 87%;"}
 
 
 -   Ver la asociaciones entre las variables demograficas y tecnologicas con las morfologicas.
+
 :::
+
+. . .
+
+\
+
+::: {style="font-size: 87%;"}
+-   Descubir que caracteristicas de las personas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
+
+:::
+
 
 
 ## Datos

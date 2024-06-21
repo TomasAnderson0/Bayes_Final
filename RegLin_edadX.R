@@ -251,7 +251,7 @@ edadxecsf = ggplot(cerebros) +
     color = "firebrick",
     data = data_mu
   ) +
-  labs(x = "Edad", y = expression(paste("ECSF (mm)")),
+  labs(x = "Edad", y = expression(paste("ECSF⠀", (mm))),
        color = "Diagnóstico") + theme_minimal()
 
 edadxecsf2 = ggplot(cerebros) +

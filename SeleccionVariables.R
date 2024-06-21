@@ -3,6 +3,7 @@ library(readr)
 library(dplyr)
 library(loo)
 library(kableExtra)
+library(ggdist)
 
 cerebros <- read_csv("cerebros.csv")
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = factor(ifelse(intensidad_campo == 1.5, "1.5T", "3T"), levels = c("3T", "1.5T")), sexo = factor(ifelse(sexo == "female", "Femenino", "Masculino"), levels = c("Masculino", "Femenino")), resonador_fab = factor(resonador_fab, levels = c("Siemens", "Philips", "GE")))
@@ -197,8 +198,8 @@ Bres <- Bres %>% mutate(variable = c(rep("Resonador GE", 5400), rep("Resonador P
 
 grafico_betas <- rbind(Bedad, Bsexo, BVHI, BVI, Becsf, Bvcf, Binte, Bres)
 
-ggplot(grafico_betas) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = "#057057") + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
+reglogplot = ggplot(grafico_betas) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#057057","#057057","#057057","#F32835","#057057","#057057","#F32835")) + 
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal() + scale_x_continuous(breaks = -2:2)
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -263,19 +264,20 @@ loo_compare(looM1, looM2)
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              age = cerebros$edad,
-              vhi = cerebros$lh_subcx_hippocampus_volume,
-              inte = (as.numeric(as.factor(cerebros$intensidad_campo))-1),
-              axv = cerebros$edad * cerebros$lh_subcx_hippocampus_volume,
-              vxi = cerebros$lh_subcx_hippocampus_volume * (as.numeric(as.factor(cerebros$intensidad_campo))-1),
-              axi = (as.numeric(as.factor(cerebros$intensidad_campo))-1) * cerebros$edad)
+              age = scale(cerebros$edad)[1:128],
+              vhi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128],
+              inte = (as.numeric(as.factor(cerebros$intensidad_campo))),
+              axv = scale(cerebros$edad)[1:128] * scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128],
+              axi = scale(cerebros$edad)[1:128] * (as.numeric(as.factor(cerebros$diag)) - 1),
+              vxi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128] * (as.numeric(as.factor(cerebros$diag)) - 1)
+)
 
 
 init_list <- list(
-  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
-  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
-  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
-  list(b0 = 0 ,b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0)
+  list(b1 =  0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
+  list(b1 =  0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
+  list(b1 =  0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0),
+  list(b1 =  0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0)
 )
 
 
@@ -290,13 +292,79 @@ modeloMulti3 <- stan(
   seed = 1997
 )
 
-traceplot(modeloMulti3)
+looM3 <- loo(modeloMulti3)
+
+loo_compare(looM1, looM2, looM3)
 
 
 
+lista <- list(N = nrow(cerebros),
+              diag = (as.numeric(as.factor(cerebros$diag)) - 1),
+              age = scale(cerebros$edad)[1:128],
+              vhi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128],
+              inte = -((as.numeric(as.factor(cerebros$intensidad_campo)))-2),
+              axi = scale(cerebros$edad)[1:128] * (as.numeric(as.factor(cerebros$diag)) - 1)
+)
+
+
+init_list <- list(
+  list(b1 =  0, b2 = 0, b3 = 0, b5 = 0),
+  list(b1 =  0, b2 = 0, b3 = 0, b5 = 0),
+  list(b1 =  0, b2 = 0, b3 = 0, b5 = 0),
+  list(b1 =  0, b2 = 0, b3 = 0, b5 = 0)
+)
+
+
+modeloMulti4 <- stan(
+  file = "RegLogMultivarInterac2.stan",
+  data = lista,
+  chains = 4,
+  init = init_list,
+  warmup = 150,
+  iter = 1500,
+  control = list(adapt_delta = 0.99),
+  seed = 1997
+)
+
+looM4 <- loo(modeloMulti4)
+
+loo_compare(looM1, looM2, looM3, looM4)
+
+
+esbozo <- data.frame(rstan::extract(modeloMulti4, c("b0", "b1", "b2", "b3", "b5")))
+seq.edad = (seq(20,90,1)-mean(cerebros$edad))/sd(cerebros$edad)
+
+
+sample1 = esbozo[sample(1:nrow(esbozo), size = 500),]
+data_sample = as.data.frame(matrix(nrow = 142*500, ncol = 4))
+for (i in 1:500) {
+  data_sample[((i-1)*142+1):(142*i),] = data.frame(pi = c(rep(sample1$b0[i], length(seq.edad)) + sample1$b1[i]*seq.edad + rep(sample1$b3[i], length(seq.edad)) + sample1$b5[i]*seq.edad,
+                           rep(sample1$b0[i], length(seq.edad)) + sample1$b1[i]*seq.edad), inte = rep(c("3T", "1.5T"), each = 71), grupo = rep(c(i,i+500),each = 71), edad = rep(seq(20,90,1),2))
+}
 
 
 
+ggplot(data_sample) + stat_lineribbon(aes(x = V4, y = exp(V1)/(1+exp(V1)), fill = V2, fill_ramp = after_stat(level)), alpha = .8) + 
+  scale_x_continuous(breaks = seq(20,90,5), limits = c(20,90))
 
+seq.vhi = (seq(1.8,5.6,length.out = 71)-mean(cerebros$lh_subcx_hippocampus_volume))/sd(cerebros$lh_subcx_hippocampus_volume)  
 
+data_sample2 = as.data.frame(matrix(nrow = 142*500, ncol = 4))
 
+for (i in 1:500) {
+  data_sample2[((i-1)*142+1):(142*i),] = data.frame(pi = c(rep(sample1$b0[i], length(seq.vhi)) + sample1$b2[i] * seq.vhi + rep(sample1$b3[i], length(seq.vhi)),
+                                                          rep(sample1$b0[i], length(seq.vhi)) + sample1$b2[i]*seq.vhi), inte = rep(c("3T", "1.5T"), each = 71), grupo = rep(c(i,i+500),each = 71), edad = rep(seq(1.8,5.6,length.out = 71),2))
+}
+
+ggplot(data_sample2) + stat_lineribbon(aes(x = V4, y = exp(V1)/(1+exp(V1)), fill = V2, fill_ramp = after_stat(level)), alpha = .8)
+
+data_sample3 = as.data.frame(matrix(nrow = 142*500, ncol = 4))
+
+for (i in 1:500) {
+  data_sample3[((i-1)*142+1):(142*i),] = data.frame(pi = c(rep(sample1$b0[i], length(seq.vhi)) + sample1$b2[i] * seq.vhi + rep(sample1$b1[i] * (mean(cerebros$edad[cerebros$intensidad_campo == "1.5T"])-mean(cerebros$edad))/sd(cerebros$edad), length(seq.vhi)),
+                                                           rep(sample1$b0[i], length(seq.vhi))+ rep(sample1$b3[i], length(seq.vhi)) + rep((sample1$b1[i]+sample1$b5[i]) * (mean(cerebros$edad[cerebros$intensidad_campo == "1.5T"])-mean(cerebros$edad))/sd(cerebros$edad), length(seq.vhi))+ rep(sample1$b1[i] * (mean(cerebros$edad[cerebros$intensidad_campo == "1.5T"])-mean(cerebros$edad))/sd(cerebros$edad), length(seq.vhi)) + sample1$b2[i]*seq.vhi), inte = rep(c("1.5T", "3T"), each = 71), grupo = rep(c(i,i+500),each = 71), edad = rep(seq(1.8,5.6,length.out = 71),2))
+}
+
+ggplot(data_sample3) + stat_lineribbon(aes(x = V4, y = exp(V1)/(1+exp(V1)), fill = V2, fill_ramp = after_stat(level)), alpha = .8)
+
+save(reglogplot, file = "reglin.RData")

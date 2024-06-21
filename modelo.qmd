@@ -14,7 +14,7 @@ load("modelob0.RData")
 
 
 
-## Descripción matematica
+## Regresión logistica
 
 ::: {style="font-size: 87%;"}
 Para modelar los diagnosticos, se plantea un modelo bayesiano de regresión logistica. La variable respuesta es:
@@ -31,18 +31,12 @@ Donde: $\; \; \; \; \; \; \; \; Y_i|\pi_i \sim Bernoulli(\pi_i) \; \; \; \;$ y $
 Entonces, para pasar a modelar una recta en vez de la variable dicotomica, se aplica la función *logit* como función de enlace.
 :::
 
-## Descripción matematica
+## Regresión logistica
 
 ::: {style="font-size: 87%;"}
 Por lo que la nueva variable a modelar sera:
 
-$$Y^*_i=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$ Entonces, se requiere plantear cuales son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide incluir todas las variables disponibles en el modelo.
-:::
-
-## Modelo 1
-
-::: {style="font-size: 87%;"}
-$$Y^*_i= \beta_0 + \beta_1 VHI_i + \beta_2 VI_i + \beta_3 ECSF_i + \beta_4 VCF_i +$$ $$\beta_5 Sexo_i + \beta_6 Edad_i + \beta_7 Int_i + \beta_8 Res_{1i} + \beta_9 Res_{2i}$$ Entonces, para estimar el modelo, primero se procede a plantear los *priors* de cada parametro que lo conforma.
+$$g(\pi_i)=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$ Entonces, se requiere plantear cuales son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide plantear modelos univariados para cada variable, y quedarse con aquellas donde el intervalo de credibilidad a *posteriori* del parametro no cubra el cero.
 :::
 
 ## Definición de priors
@@ -50,6 +44,19 @@ $$Y^*_i= \beta_0 + \beta_1 VHI_i + \beta_2 VI_i + \beta_3 ECSF_i + \beta_4 VCF_i
 TBA
 
 ## PP priori
+
+
+
+## asd
+
+```{r}
+#| fig.cap:  $\textit{Posteriors}$ de los parametros para cada modelo univariado
+load("reglin.RData")
+reglogplot
+```
+
+
+
 
 ## Ajuste y evaluación del modelo
 

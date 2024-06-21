@@ -139,3 +139,8 @@ reglin4 = ggplot(posteriorcomp4) + stat_summary(aes(y = variable, x = b1), fun.d
   ggtitle("VCF") + theme(plot.title = element_text(hjust = .5))
 
 save(reglin1, reglin2, reglin3, reglin4, file = "reglin.RData")
+
+
+
+
+

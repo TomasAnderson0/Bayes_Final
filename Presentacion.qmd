@@ -1,7 +1,10 @@
 ---
-title: "Untitled"
+title: "Enfoque bayesiano en diagnostico de enfermedades neurodegenerativas"
+subtitle: "TP Final"
 controls: True
-format: revealjs
+format:
+  revealjs:
+    slide-number: true
 editor: visual
 ---
 
@@ -57,7 +60,22 @@ Por lo tanto, en este informe se tratara de dilucidar que variables descriptas a
 ## Datos
 
 ::: {style="font-size: 87%;"}
-Se cuentan con la siguiente información de 128 pacientes que se sometieron a diferentes estudios de resonancia magnética en diferentes partes del mundo.
+Se tie información de 128 pacientes que se sometieron a diferentes estudios de resonancia magnética en diferentes partes del mundo.
+:::
+
+. . .
+
+::: {style="font-size: 70%;"}
+
+::: columns
+::: {.column width="50%"}
+-   Edad: Edad del paciente.
+:::
+::: {.column width="50%"}
+-   Sexo
+:::
+:::
+
 :::
 
 . . .
@@ -65,21 +83,41 @@ Se cuentan con la siguiente información de 128 pacientes que se sometieron a di
 ::: {style="font-size: 70%;"}
 ::: columns
 ::: {.column width="50%"}
--   Edad: Edad del paciente.
 -   Intensidad: Intensidad del campo magnético utilizado en la imagen, puede ser 3 T o 1.5 T
+
+:::
+::: {.column width="50%"}
 -   Resonador: Marca del resonador magnético.
+
+:::
+:::
+:::
+
+
+
+. . .
+
+::: {style="font-size: 70%;"}
+::: columns
+::: {.column width="50%"}
+-   VHI: Volumen del hipocampo izquierdo (mm³)
+-   VI: Volumen intracraneal (mm³)
+
+:::
+::: {.column width="50%"}
+-   ECSF: Espesor de la corteza superior frontal (mm)
+-   VCF: Volumen de la corteza fusiforme (mm³)
+:::
+:::
+:::
+
+. . . 
+
+::: {style="font-size: 70%;"}
 -   Diagnostico: puede ser HC (control saludable), MCI (deterioro cognitivo leve) o AD (Enfermedad de Alzheimer).
 :::
 
-::: {.column width="50%"}
--   Sexo
--   VHI: Volumen del hipocampo izquierdo (en mm³)
--   VI: Volumen intracraneal (en mm³)
--   ECSF: Espesor de la corteza superior frontal (en mm)
--   VCF: Volumen de la corteza fusiforme (en mm³)
-:::
-:::
-:::
+
 
 ## Objetivos
 
@@ -92,7 +130,7 @@ Se cuentan con la siguiente información de 128 pacientes que se sometieron a di
 ::: {style="font-size: 87%;"}
 
 
--   Ver la asociaciones entre las variables demograficas y tecnologicas con las morfologicas.
+- Observar posibles asociaciones entre las variables demograficas y tecnologicas con las morfologicas.
 
 :::
 
@@ -101,7 +139,7 @@ Se cuentan con la siguiente información de 128 pacientes que se sometieron a di
 \
 
 ::: {style="font-size: 87%;"}
--   Descubir que caracteristicas de las personas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
+-   Descubir que caracteristicas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
 
 :::
 
@@ -127,21 +165,25 @@ Se cuentan con la siguiente información de 128 pacientes que se sometieron a di
 Las variables categoricas tienen las siguientes distribuciones marginales:
 :::
 
-```{r, fig.align='center'}
+
+
+
+```{r , fig.align='center'}
+#| fig.cap:  Distribución de las variables categoricas
 graficores <- cerebros %>% select(resonador_fab) %>%
-  count(categ = resonador_fab) %>% mutate(n = n*100/128) %>% 
+  count(categ = resonador_fab) %>% mutate(n = n/128) %>% 
   mutate(barras = as.factor(c(3, 2, 1))) %>% mutate(v = "Resonador")
 
 graficosex <- cerebros %>% select(sexo) %>%
-  count(categ = sexo) %>% mutate(n = n*100/128) %>% 
+  count(categ = sexo) %>% mutate(n = n/128) %>% 
   mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Sexo") %>% mutate(categ = ifelse(categ == "Masculino", "Masculino", "Femenino"))
 
 graficointe <- cerebros %>% select(intensidad_campo) %>%
-  count(categ = intensidad_campo) %>% mutate(n = n*100/128) %>% 
+  count(categ = intensidad_campo) %>% mutate(n = n/128) %>% 
   mutate(barras = as.factor(c(2, 1))) %>% mutate(v = "Intensidad")
 
 graficodiag <- cerebros %>% select(diag) %>%
-  count(categ = diag) %>% mutate(n = n*100/128) %>% 
+  count(categ = diag) %>% mutate(n = n/128) %>% 
   mutate(barras = as.factor(c(1, 2))) %>% mutate(v = "Diagnóstico")
 
 grafico <- rbind(graficores, graficosex, graficointe, graficodiag)
@@ -149,43 +191,39 @@ grafico <- rbind(graficores, graficosex, graficointe, graficodiag)
 ggplot() + 
   geom_bar(data = grafico ,aes(x = v, y = n, fill = barras), stat = "identity") +
   scale_fill_manual(values = c("#168168", "#38A38A", "#5AC5AC")) +
-  geom_text(data = grafico, aes(x = v, y = c(10, 32, 70,
-                                             25, 75,
-                                             25, 75,
-                                             75, 25),
+  geom_text(data = grafico, aes(x = v, y = c(.10, .32, .70,
+                                             .25, .75,
+                                             .25, .75,
+                                             .75, .25),
                                 label = categ), 
             vjust = -0.5, size = 6, color = "white") + 
   theme_minimal() +
   theme(legend.position = "none") +
-  labs(y = "Porcentaje", x = "Variable")
+  labs(y = "Proporción", x = "Variable")
 
 ```
+
+
 
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
 Para dimensionar las distribuciones de las variables cuantitativas, se presenta la siguiente tabla con estadisticas de ellas.
 
-```{r, fig.align='center'}
-sumary = summary(cerebros[,c(4,7:10)])
+```{r}
+#| fig.cap:  Distribución de las variables continuas
+plotc1 = ggplot(cerebros) + geom_boxplot(aes(y = lh_subcx_hippocampus_volume), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("VHI⠀", (cm^{3}))), y = "") + xlim(-.8,.8)
 
+plotc2 = ggplot(cerebros) + geom_boxplot(aes(y = xh_general_etiv_volume), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("VI⠀(100", cm^{3}, ")")), y = "") + xlim(-.8,.8)
 
-texto1 = gsub("Min.   :", "", sumary[1,])
-minimo = round(as.numeric(texto1), 2)
-texto2 = gsub("1st Qu.:", "", sumary[2,])
-q1 = round(as.numeric(texto2), 2)
-texto3 = gsub("Median :", "", sumary[3,])
-mediana = round(as.numeric(texto3), 2)
-texto4 = gsub("Mean   :", "", sumary[4,])
-media = round(as.numeric(texto4), 2)
-texto5 = gsub("3rd Qu.:", "", sumary[5,])
-q3 = round(as.numeric(texto5), 2)
-texto6 = gsub("Max.   :", "", sumary[6,])
-maximo = round(as.numeric(texto6), 2)
+plotc3 = ggplot(cerebros) + geom_boxplot(aes(y = lh_cortex_superiorfrontal_thickness), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("ECSF⠀", (mm))), y = "") + xlim(-.8,.8)
 
-matrices =matrix(c(minimo, q1, mediana, media, q3, maximo), nrow = 6, ncol = 5, byrow = T)
-rownames(matrices) = c("**Mínimo**", "**Q1**", "**Mediana**", "**Media**", "**Q3**", "**Máximo**")
-kable(matrices, col.names = c("Edad", "VHI", "VI", "ECSF", "VCF"), align = "c")
+plotc4 = ggplot(cerebros) + geom_boxplot(aes(y = lh_cortex_fusiform_volume), fill = "#168168")  + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("VCF⠀", (cm^{3}))), y = "")+ xlim(-.8,.8)
+
+plotc5 = ggplot(cerebros) + geom_boxplot(aes(y = edad), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = "Edad", y = "") + xlim(-.8,.8)
+
+ggarrange(plotc1, plotc2, plotc3, plotc4, plotc5)
 ```
+
 
 :::

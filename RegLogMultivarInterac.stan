@@ -18,13 +18,13 @@ parameters {
   real b6;
 }
 model {
-  // b0 ~ normal(0, .01);
-  // b1 ~ normal(0, .01);
-  // b2 ~ normal(0, .01);
-  // b3 ~ normal(0, .01);
-  // b4 ~ normal(0, .01);
-  // b5 ~ normal(0, .01);
-  // b6 ~ normal(0, .01);
+b0 ~ normal(0, 1);
+b1 ~ normal(0, 1);
+b2 ~ normal(0, 1);
+b3 ~ normal(0, 1);
+b4 ~ normal(0, 1);
+b5 ~ normal(0, 1);
+b6 ~ normal(0, 1);
   diag ~ bernoulli_logit(b0 + b1*age + b2*vhi + b3*inte + b4*axv + b5*axi + b6*vxi);
 }
 generated quantities {

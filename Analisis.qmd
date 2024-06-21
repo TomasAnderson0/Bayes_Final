@@ -5,7 +5,6 @@ format:
   revealjs:
     slide-number: TRUE
 editor: visual
-
 ---
 
 ```{r, error=FALSE}
@@ -20,26 +19,25 @@ cerebros <- read_csv("cerebros.csv")
 cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = factor(ifelse(intensidad_campo == 1.5, "1.5T", "3T"), levels = c("3T", "1.5T")), sexo = factor(ifelse(sexo == "female", "Femenino", "Masculino"), levels = c("Masculino", "Femenino")), resonador_fab = factor(resonador_fab, levels = c("Siemens", "Philips", "GE")))
 ```
 
-
-
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Entonces se observa si las variables tecnologicas estan relacionadas con las demas variables.
+Primero se observa si las variables tecnologicas estan relacionadas con las demas variables.
 :::
 
 ```{r, fig.align='center'}
+#| fig.cap:  Distribución de la intensidad vs las variables morfológicas
 plot17 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = lh_subcx_hippocampus_volume), fill = "#168168")+
-  scale_y_continuous(name = "VHI") + scale_x_discrete(name = "Intensidad") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VHI⠀", (cm^{3})))) + scale_x_discrete(name = "Intensidad") + theme_minimal()
 
 plot18 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = xh_general_etiv_volume), fill = "#168168")+
-  scale_y_continuous(name = "VI") + scale_x_discrete(name = "Intensidad") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VCF⠀(100", cm^{3}, ")"))) + scale_x_discrete(name = "Intensidad") + theme_minimal()
 
 plot19 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = lh_cortex_superiorfrontal_thickness), fill = "#168168")+
-  scale_y_continuous(name = "ECSF") + scale_x_discrete(name = "Intensidad") + theme_minimal()
+  scale_y_continuous(name = expression(paste("ECSF⠀", (mm)))) + scale_x_discrete(name = "Intensidad") + theme_minimal()
 
 plot20 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = lh_cortex_fusiform_volume), fill = "#168168")+
-  scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Intensidad") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VCF⠀", (cm^{3})))) + scale_x_discrete(name = "Intensidad") + theme_minimal()
 ggarrange(plot17, plot18, plot19, plot20)
 ```
 
@@ -50,17 +48,18 @@ Primero se observa si las variables tecnologicas estan relacionadas con las dema
 :::
 
 ```{r, fig.align='center'}
+#| fig.cap:  Distribución de la marca de los resonadores vs las variables morfológicas
 plot21 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_subcx_hippocampus_volume), fill = "#168168")+
-  scale_y_continuous(name = "VHI") + scale_x_discrete(name = "Fábrica del resonador") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VHI⠀", (cm^{3})))) + scale_x_discrete(name = "Marca del resonador") + theme_minimal()
 
 plot22 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = xh_general_etiv_volume), fill = "#168168")+
-  scale_y_continuous(name = "VI") + scale_x_discrete(name = "Fábrica del resonador") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VI⠀(100", cm^{3}, ")"))) + scale_x_discrete(name = "Marca del resonador") + theme_minimal()
 
 plot23 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_superiorfrontal_thickness), fill = "#168168")+
-  scale_y_continuous(name = "ECSF") + scale_x_discrete(name = "Fábrica del resonador") + theme_minimal()
+  scale_y_continuous(name = expression(paste("ECSF⠀", (mm)))) + scale_x_discrete(name = "Marca del resonador") + theme_minimal()
 
 plot24 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = lh_cortex_fusiform_volume), fill = "#168168")+
-  scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Fábrica del resonador") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VCF⠀", (cm^{3})))) + scale_x_discrete(name = "Marca del resonador") + theme_minimal()
 ggarrange(plot21, plot22, plot23, plot24)
 ```
 
@@ -69,8 +68,11 @@ ggarrange(plot21, plot22, plot23, plot24)
 ::: {style="font-size: 87%;"}
 Primero se observa si las variables tecnologicas estan relacionadas con las demas variables.
 :::
+::: {style="font-size: 87%;font-family:American Typewriter;"}
+
 
 ```{r, fig.align='center'}
+#| fig.cap:  Distribución de las variables tecnológicas vs la edad
 plot25 = ggplot(cerebros) + geom_boxplot(aes(x = intensidad_campo, y = edad), fill = "#168168")+
   scale_y_continuous(name = "Edad") + scale_x_discrete(name = "Intensidad") + theme_minimal()
 
@@ -79,69 +81,76 @@ plot26 = ggplot(cerebros) + geom_boxplot(aes(x = resonador_fab, y = edad), fill 
 
 ggarrange(plot25, plot26)
 ```
+::: 
 
 ## Análisis exploratorio
+
+::: {style="font-size: 87%;"}
+Donde las relaciones entre las variables tecnológicas es la siguiente:
+:::
 
 ```{r}
-ggplot(cerebros) + geom_bar(aes(x = as.factor(resonador_fab), fill = as.factor(intensidad_campo)), position = "fill") + scale_fill_manual( values = c("#168168", "#38A38A", "#5AC5AC")) +  scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") + theme_minimal() + labs(fill = "Intensidad")
+#| fig.cap:  Distribución de la intensidad vs la marca de los resonadores
+ggplot(cerebros) + geom_bar(aes(x = as.factor(resonador_fab), fill = as.factor(intensidad_campo)), position = "fill") + scale_fill_manual( values = c("#168168", "#38A38A", "#5AC5AC")) +  scale_x_discrete(name = "Marca del resonador") +   geom_text(x = 3, y = .49, label = "1.5T", color = "#FFFFFF", size = 6) +
+geom_text(x = 1, y = .56, label = "3T", color = "#FFFFFF", size = 6) +
+geom_text(x = 2, y = .85, label = "3T", color = "#FFFFFF", size = 6) +
+geom_text(x = 2, y = .35, label = "1.5T", color = "#FFFFFF", size = 6) + scale_y_continuous(name = "Proporción") + theme_minimal() + labs(fill = "Intensidad") + theme(legend.position = "none")
 ```
 
-
-
 ## Análisis exploratorio
-
 
 ::: {style="font-size: 87%;"}
 Luego se observa si las variables morfologicas estan relacionadas con las demograficas.
 :::
 
 ```{r}
+#| fig.cap:  Distribución de las variables morfológicas vs la edad
+
 load("Graficos_edad_morf.RData")
 
 ggarrange(edadxvhi2, edadxvi2, edadxecsf2, edadxvcf2)
 ```
 
-
 ## Análisis exploratorio
-
 
 ::: {style="font-size: 87%;"}
 Luego se observa si las variables morfologicas estan relacionadas con las demograficas.
 :::
 
 ```{r, fig.align='center'}
+#| fig.cap:  Distribución de las variables morfológicas vs el sexo
+
 plot13 = ggplot(cerebros) + geom_boxplot(aes(x = sexo, y = lh_subcx_hippocampus_volume), fill = "#168168")+
-  scale_y_continuous(name = "VHI") + scale_x_discrete(name = "Sexo") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VHI⠀", (cm^{3})))) + scale_x_discrete(name = "Sexo") + theme_minimal()
 
 plot14 = ggplot(cerebros) + geom_boxplot(aes(x = sexo, y = xh_general_etiv_volume), fill = "#168168")+
-  scale_y_continuous(name = "VI") + scale_x_discrete(name = "Sexo") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VI⠀(100 ", cm^{3}, ")"))) + scale_x_discrete(name = "Sexo") + theme_minimal()
 
 plot15 = ggplot(cerebros) + geom_boxplot(aes(x = sexo, y = lh_cortex_superiorfrontal_thickness), fill = "#168168")+
-  scale_y_continuous(name = "ECSF") + scale_x_discrete(name = "Sexo") + theme_minimal()
+  scale_y_continuous(name = expression(paste("ECSF⠀", (mm)))) + scale_x_discrete(name = "Sexo") + theme_minimal()
 
 plot16 = ggplot(cerebros) + geom_boxplot(aes(x = sexo, y = lh_cortex_fusiform_volume), fill = "#168168")+
-  scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Sexo") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VCF⠀", (cm^{3})))) + scale_x_discrete(name = "Sexo") + theme_minimal()
 ggarrange(plot13, plot14, plot15, plot16)
 ```
 
-
-## Titulo
+## Regresión lineal
 
 ::: {style="font-size: 87%;"}
-
 Para ver que variables explican mejor el comportamiento de las morfologicas, se plantea un modelo bayesiano de regresión lineal.
 
-$$Y_{i}|\mu_{i},\sigma^2 \sim N(\mu_{i},\sigma^2) $$
-Donde: 
+$$Y_{i}|\mu_{i},\sigma^2 \sim N(\mu_{i},\sigma^2) $$ Donde:
 
-$$\mu_{ij}= \beta_0 +\beta_{E} \cdot x_{Edad_i} + \beta_{M} \cdot x_{Masculino_i} + \\  \beta_{I} \cdot x_{3T_i}+ \beta_{G} \cdot x_{GE_i}+ \beta_{P} \cdot x_{Philips_i} $$
-Como el objetivo es describir los datos, se utilizan *priors* uniformes.
-
+$$\mu_{ij}= \beta_0 +\beta_{E} \cdot x_{Edad_i} + \beta_{M} \cdot x_{Masculino_i} + \\  \beta_{I} \cdot x_{3T_i}+ \beta_{G} \cdot x_{GE_i}+ \beta_{P} \cdot x_{Philips_i} $$ Como el objetivo es describir los datos, se utilizan *priors* uniformes.
 :::
 
-## Titulo
+## Regresión lineal
+
+Se ajustan los modelos y se obtienen los siguientes resultados:
 
 ```{r}
+#| fig.cap:  $\textit{Posteriors}$ de los parametros para cada variable morfológica
+
 load("reglin.RData")
 
 ggarrange(reglin1,reglin2,reglin3,reglin4)
@@ -152,36 +161,23 @@ ggarrange(reglin1,reglin2,reglin3,reglin4)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Para ver si las variables morfológicas varian según las variables demograficas se construyen los siguientes graficos:
-:::
-
-```{r, fig.align='center'}
-
-
-ggarrange(edadxvhi, edadxvi, edadxecsf, edadxvcf, common.legend = TRUE, legend="top")
-
-```
-
-## Análisis exploratorio
-
-::: {style="font-size: 87%;"}
-
-Para ver si el diagnóstico es diferente según las variables morfologicas se construyen los siguientes graficos:
-
+Ahora, se observa si el diagnóstico difiere según las demas variables.
 :::
 
 ```{r}
+#| fig.cap:  Distribución de las variables morfológicas vs el diagnóstico
+
 plot29 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_subcx_hippocampus_volume), fill = "#168168" ) +
-  scale_y_continuous(name = "VHI") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VHI⠀", (cm^{3})))) + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
 
 plot30 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = xh_general_etiv_volume), fill = "#168168")+
-  scale_y_continuous(name = "VI") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VI⠀(100", cm^{3}, ")"))) + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
 
 plot31 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_superiorfrontal_thickness), fill = "#168168")+
-  scale_y_continuous(name = "ECSF") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+  scale_y_continuous(name = expression(paste("ECSF⠀", (mm)))) + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
 
 plot32 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = lh_cortex_fusiform_volume), fill = "#168168")+
-  scale_y_continuous(name = "VCF") + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
+  scale_y_continuous(name = expression(paste("VCF⠀", (cm^{3})))) + scale_x_discrete(name = "Diagnóstico") + theme_minimal()
 
 ggarrange(plot29, plot30, plot31, plot32)
 
@@ -190,10 +186,12 @@ ggarrange(plot29, plot30, plot31, plot32)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Para ver si el diagnóstico es diferente según las variables demograficas se construyen los siguientes graficos:
+Ahora, se observa si el diagnóstico difiere según las demas variables.
 :::
 
 ```{r, fig.align='center'}
+#| fig.cap:  Distribución de las variables demograficas vs el diagnóstico
+#| 
 plot5 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = sexo), position = "fill") + scale_fill_manual(values = c("#168168", "#38A38A")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") +   geom_text(x = 1, y = .75, label = "Masculino", color = "#FFFFFF", size = 6) +
 geom_text(x = 1, y = .25, label = "Femenino", color = "#FFFFFF", size = 6) +
 geom_text(x = 2, y = .75, label = "Masculino", color = "#FFFFFF", size = 6) +
@@ -211,10 +209,12 @@ ggarrange(plot6, plot5)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Para ver si el diagnóstico es diferente según las variables tecnologicas se construyen los siguientes graficos:
+Ahora, se observa si el diagnóstico difiere según las demas variables.
 :::
 
 ```{r, fig.align='center'}
+#| fig.cap:  Distribución de las variables tecnológicas vs el diagnóstico
+#| 
 plot7 = ggplot(cerebros) + geom_bar(aes(x = diag, fill = intensidad_campo), position = "fill") + theme(legend.position = "top") + scale_fill_manual(values = c("#168168", "#38A38A")) + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Proporción") +
 geom_text(x = 1, y = .6, label = "3T", color = "#FFFFFF", size = 6) +
 geom_text(x = 1, y = .10, label = "1.5T", color = "#FFFFFF", size = 6) +
@@ -238,15 +238,3 @@ geom_text(x = 2, y = .27, label = "GE", color = "#FFFFFF", size = 6) +
 
 ggarrange(plot7, plot8)
 ```
-
-
-
-
-
-
-
-
-
-
-
-

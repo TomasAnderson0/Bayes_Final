@@ -22,7 +22,7 @@ cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_s
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Primero se observa si las variables tecnologicas estan relacionadas con las demas variables.
+Primero se observa si las variables tecnológicas están relacionadas con las demás variables.
 :::
 
 ```{r, fig.align='center'}
@@ -44,7 +44,7 @@ ggarrange(plot17, plot18, plot19, plot20)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Primero se observa si las variables tecnologicas estan relacionadas con las demas variables.
+Primero se observa si las variables tecnológicas están relacionadas con las demás variables.
 :::
 
 ```{r, fig.align='center'}
@@ -66,7 +66,7 @@ ggarrange(plot21, plot22, plot23, plot24)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Primero se observa si las variables tecnologicas estan relacionadas con las demas variables.
+Primero se observa si las variables tecnológicas están relacionadas con las demás variables.
 :::
 ::: {style="font-size: 87%;font-family:American Typewriter;"}
 
@@ -100,7 +100,7 @@ geom_text(x = 2, y = .35, label = "1.5T", color = "#FFFFFF", size = 6) + scale_y
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Luego se observa si las variables morfologicas estan relacionadas con las demograficas.
+Luego se observa si las variables morfológicas están relacionadas con las demográficas.
 :::
 
 ```{r}
@@ -114,7 +114,7 @@ ggarrange(edadxvhi2, edadxvi2, edadxecsf2, edadxvcf2)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Luego se observa si las variables morfologicas estan relacionadas con las demograficas.
+Luego se observa si las variables morfológicas están relacionadas con las demográficas.
 :::
 
 ```{r, fig.align='center'}
@@ -137,7 +137,7 @@ ggarrange(plot13, plot14, plot15, plot16)
 ## Regresión lineal
 
 ::: {style="font-size: 87%;"}
-Para ver que variables explican mejor el comportamiento de las morfologicas, se plantea un modelo bayesiano de regresión lineal.
+Para ver que variables explican mejor el comportamiento de las morfológicas, se plantea un modelo bayesiano de regresión lineal.
 
 $$Y_{i}|\mu_{i},\sigma^2 \sim N(\mu_{i},\sigma^2) $$ Donde:
 
@@ -161,7 +161,7 @@ ggarrange(reglin1,reglin2,reglin3,reglin4)
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Ahora, se observa si el diagnóstico difiere según las demas variables.
+Ahora, se observa si el diagnóstico difiere según las demás variables.
 :::
 
 ```{r}

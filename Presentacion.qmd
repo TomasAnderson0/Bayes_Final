@@ -23,7 +23,7 @@ cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_s
 ```
 
 ::: {style="font-size: 87%;"}
-Cuando una persona llega a la vejez, el cerebro sufre cambios en su forma y tamaño, y ademas sus funciones cognitivas suelen verse deterioradas. Algunas de ellas son:
+Cuando una persona llega a la vejez, el cerebro sufre cambios en su forma y tamaño, y además sus funciones cognitivas suelen verse deterioradas. Algunas de ellas son:
 
 ::: columns
 ::: {.column width="30%"}
@@ -37,13 +37,13 @@ Cuando una persona llega a la vejez, el cerebro sufre cambios en su forma y tama
 :::
 :::
 
-Cuando estos deterioros son mayores a los esperados para la edad, se habla de deterioro cognitivo leve (MCI) o de demencia incipiente. Este trastorno puede mantenerse durante varios años o puede transformarse en la Enfermedad de Alzheimer (AD), la causa mas habitual de demencia.
+Cuando estos deterioros son mayores a los esperados para la edad, se habla de deterioro cognitivo leve (MCI) o de demencia incipiente. Este trastorno puede mantenerse durante varios años o puede transformarse en la Enfermedad de Alzheimer (AD), la causa más habitual de demencia.
 :::
 
 ## Introducción
 
 ::: {style="font-size: 87%;"}
-Mediante resonancias magnéticas se puede generar imágenes detalladas del cerebro con un alto contraste entre los diferentes tipos de tejidos cerebrales que permite caracterizar sus propiedades morfométricas a traves de algoritmos de segmentación estructural.
+Mediante resonancias magnéticas se puede generar imágenes detalladas del cerebro con un alto contraste entre los diferentes tipos de tejidos cerebrales que permite caracterizar sus propiedades morfométricas a través de algoritmos de segmentación estructural.
 
  Los cambios neurobiológicos que causa el Alzheimer, ocurren mucho antes de que los síntomas se presenten, tal como cambios morfológicos en algunas regiones del cerebro. El diagnóstico de estas enfermedades es esencialmente cualitativo: un/a especialista compara el grado de atrofia que observa en la resonancia magnética con el modelo mental que tiene de un cerebro sano a esa edad.
 :::
@@ -54,13 +54,13 @@ Mediante resonancias magnéticas se puede generar imágenes detalladas del cereb
 ::: {style="font-size: 87%;"}
 Dado que los cambios en el cerebro no son lineales con la edad y presentan gran variabilidad entre diferentes personas, sumado a que la progresión de una enfermedad neurodegenerativa no es igual en todos los pacientes, se vuelve difícil poder definir qué es normal y qué es patológico.
 
-Por lo tanto, en este informe se tratara de dilucidar que variables descriptas a continuación estan relacionadas con el diagnostico de la salud mental de la persona.
+Por lo tanto, en este informe se trata de dilucidar que variables descritas a continuación están relacionadas con el diagnóstico de la salud mental de la persona.
 :::
 
 ## Datos
 
 ::: {style="font-size: 87%;"}
-Se tie información de 128 pacientes que se sometieron a diferentes estudios de resonancia magnética en diferentes partes del mundo.
+Se tiene información de 128 pacientes que se sometieron a diferentes estudios de resonancia magnética en diferentes partes del mundo.
 :::
 
 . . .
@@ -130,7 +130,7 @@ Se tie información de 128 pacientes que se sometieron a diferentes estudios de 
 ::: {style="font-size: 87%;"}
 
 
-- Observar posibles asociaciones entre las variables demograficas y tecnologicas con las morfologicas.
+- Observar posibles asociaciones entre las variables demográficas y tecnológicas con las morfológicas.
 
 :::
 
@@ -139,7 +139,7 @@ Se tie información de 128 pacientes que se sometieron a diferentes estudios de 
 \
 
 ::: {style="font-size: 87%;"}
--   Descubir que caracteristicas estan ligadas con el desarrollo de una enfermedad neurodegenerativa
+-   Descubrir que características están ligadas con el desarrollo de una enfermedad neurodegenerativa
 
 :::
 
@@ -148,13 +148,13 @@ Se tie información de 128 pacientes que se sometieron a diferentes estudios de 
 ## Datos
 
 ::: {style="font-size: 87%;"}
--   Como el analisis del diagnostico esta centrado en si el paciente desarrollo o no una enfermedad neurodegenerativa, se decide unir las categorias de MCI y AD en una nueva llamada MCI&AD, la cual se interpreta como presencia de deterioro cognitivo patológico.
+-   Como el análisis del diagnóstico está centrado en sí el paciente desarrollo o no una enfermedad neurodegenerativa, se decide unir las categorías de MCI y AD en una nueva llamada MCI&AD, la cual se interpreta como presencia de deterioro cognitivo patológico.
 :::
 
 . . .
 
 ::: {style="font-size: 87%;"}
--   Ademas, las variables VHI y VCF se las divide por 1000, y VI por 100000 para tener una escala mas chica, ya que esto mejora el rendimiento de los metodos de muestreo. Sus nuevas medidas son $cm^3$ para las primeras dos y 100 $cm^3$ para la última.
+-   Además, las variables VHI y VCF se las divide por 1000, y VI por 100000 para tener una escala más chica, ya que esto mejora el rendimiento de los métodos de muestreo. Sus nuevas medidas son $cm^3$ para las primeras dos y 100 $cm^3$ para la última.
 :::
 
 
@@ -162,7 +162,7 @@ Se tie información de 128 pacientes que se sometieron a diferentes estudios de 
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Las variables categoricas tienen las siguientes distribuciones marginales:
+Las variables categóricas tienen las siguientes distribuciones marginales:
 :::
 
 
@@ -208,7 +208,7 @@ ggplot() +
 ## Análisis exploratorio
 
 ::: {style="font-size: 87%;"}
-Para dimensionar las distribuciones de las variables cuantitativas, se presenta la siguiente tabla con estadisticas de ellas.
+Para dimensionar las distribuciones de las variables cuantitativas, se presentan los siguiente gráficos:
 
 ```{r}
 #| fig.cap:  Distribución de las variables continuas

@@ -4,15 +4,16 @@ library(dplyr)
 library(loo)
 library(kableExtra)
 library(ggdist)
+library(ggplot2)
 
 cerebros <- read_csv("cerebros.csv")
-cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), lh_subcx_hippocampus_volume = lh_subcx_hippocampus_volume/1000, xh_general_etiv_volume = xh_general_etiv_volume/100000, lh_cortex_fusiform_volume = lh_cortex_fusiform_volume/1000, intensidad_campo = factor(ifelse(intensidad_campo == 1.5, "1.5T", "3T"), levels = c("3T", "1.5T")), sexo = factor(ifelse(sexo == "female", "Femenino", "Masculino"), levels = c("Masculino", "Femenino")), resonador_fab = factor(resonador_fab, levels = c("Siemens", "Philips", "GE")))
+cerebros = cerebros %>% mutate(diag = ifelse(diag == "HC", "HC", "MCI&AD"), intensidad_campo = factor(ifelse(intensidad_campo == 1.5, "1.5T", "3T"), levels = c("3T", "1.5T")), sexo = factor(ifelse(sexo == "female", "Femenino", "Masculino"), levels = c("Masculino", "Femenino")), resonador_fab = factor(resonador_fab, levels = c("Siemens", "Philips", "GE")))
 
 # --------------------- EDAD -------------------------------------
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              ver = cerebros$edad
+              ver = scale(cerebros$edad)[1:128]
 )
 
 modelo_edad <- stan(
@@ -57,7 +58,7 @@ Bsexo <- Bsexo %>% mutate(variable = "Sexo")
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              ver = cerebros$lh_subcx_hippocampus_volume
+              ver = scale(cerebros$lh_subcx_hippocampus_volume)[1:128]
 )
 
 modelo_VHI <- stan(
@@ -80,7 +81,7 @@ BVHI <- BVHI %>% mutate(variable = "VHI")
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              ver = cerebros$xh_general_etiv_volume
+              ver = scale(cerebros$xh_general_etiv_volume)[1:128]
 )
 
 modelo_VI <- stan(
@@ -103,7 +104,7 @@ BVI <- BVI %>% mutate(variable = "VI")
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              ver = cerebros$lh_cortex_superiorfrontal_thickness
+              ver = scale(cerebros$lh_cortex_superiorfrontal_thickness)[1:128]
 )
 
 modelo_ecsf <- stan(
@@ -126,7 +127,7 @@ Becsf <- Becsf %>% mutate(variable = "ECSF")
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              ver = cerebros$lh_cortex_fusiform_volume
+              ver = scale(cerebros$lh_cortex_fusiform_volume)[1:128]
 )
 
 modelo_vcf <- stan(
@@ -210,10 +211,10 @@ reglogplot = ggplot(grafico_betas) + stat_summary(aes(y = variable, x = b1), fun
 
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
-              age = cerebros$edad,
-              vhi = cerebros$lh_subcx_hippocampus_volume,
-              ecsf = cerebros$lh_cortex_superiorfrontal_thickness,
-              vcf = cerebros$lh_cortex_fusiform_volume,
+              age = scale(cerebros$edad)[1:128],
+              vhi = scale(cerebros$lh_subcx_hippocampus_volume)[1:128],
+              ecsf = scale(cerebros$lh_cortex_superiorfrontal_thickness)[1:128],
+              vcf = scale(cerebros$lh_cortex_fusiform_volume)[1:128],
               inte = (as.numeric(as.factor(cerebros$intensidad_campo))-1),
               res1 = modeloresonador$res1,
               res2 = modeloresonador$res2
@@ -233,7 +234,7 @@ betas <- data.frame(rstan::extract(modeloMulti, c("b1", "b2","b3", "b4","b5", "b
 betas <- data.frame(b1 = c(betas$b1, betas$b2, betas$b3, betas$b4, betas$b5, betas$b6, betas$b7))
 betas <- betas %>% mutate(variable = c(rep("Edad", 5400), rep("VHI", 5400), rep("ECSF", 5400), rep("VCF", 5400), rep("Intensidad", 5400), rep("Resonador GE", 5400), rep("Resonador Philips", 5400)))
 
-ggplot(betas) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = "#057057") + 
+reglogplot1 = ggplot(betas) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color =  c("#057057","#F32835","#F32835","#F32835","#F32835","#F32835","#057057")) + 
   geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
 
 looM1 <- loo(modeloMulti)
@@ -268,8 +269,8 @@ lista <- list(N = nrow(cerebros),
               vhi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128],
               inte = (as.numeric(as.factor(cerebros$intensidad_campo))),
               axv = scale(cerebros$edad)[1:128] * scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128],
-              axi = scale(cerebros$edad)[1:128] * (as.numeric(as.factor(cerebros$diag)) - 1),
-              vxi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128] * (as.numeric(as.factor(cerebros$diag)) - 1)
+              axi = scale(cerebros$edad)[1:128] * (as.numeric(as.factor(cerebros$intensidad_campo))),
+              vxi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128] * (as.numeric(as.factor(cerebros$intensidad_campo)))
 )
 
 
@@ -301,9 +302,9 @@ loo_compare(looM1, looM2, looM3)
 lista <- list(N = nrow(cerebros),
               diag = (as.numeric(as.factor(cerebros$diag)) - 1),
               age = scale(cerebros$edad)[1:128],
-              vhi = scale(cerebros$lh_subcx_hippocampus_volume*1000)[1:128],
+              vhi = scale(cerebros$lh_subcx_hippocampus_volume)[1:128],
               inte = -((as.numeric(as.factor(cerebros$intensidad_campo)))-2),
-              axi = scale(cerebros$edad)[1:128] * (as.numeric(as.factor(cerebros$diag)) - 1)
+              axi = scale(cerebros$edad)[1:128] * (as.numeric(as.factor(cerebros$intensidad_campo)) - 1)
 )
 
 
@@ -330,7 +331,7 @@ looM4 <- loo(modeloMulti4)
 
 loo_compare(looM1, looM2, looM3, looM4)
 
-
+loo_compare(looM2,looM4)
 esbozo <- data.frame(rstan::extract(modeloMulti4, c("b0", "b1", "b2", "b3", "b5")))
 seq.edad = (seq(20,90,1)-mean(cerebros$edad))/sd(cerebros$edad)
 
@@ -367,4 +368,4 @@ for (i in 1:500) {
 
 ggplot(data_sample3) + stat_lineribbon(aes(x = V4, y = exp(V1)/(1+exp(V1)), fill = V2, fill_ramp = after_stat(level)), alpha = .8)
 
-save(reglogplot, file = "reglin.RData")
+save(reglogplot, reglogplot1, file = "reglin.RData")

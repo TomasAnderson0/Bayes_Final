@@ -217,23 +217,23 @@ ic1 = data.frame(x = c(mean(i1),mean(i2),mean(i3),mean(i4),mean(i5),mean(i6),mea
 
 
 ic_comp =ggplot(ic) + geom_line(aes(x = x, y = y, group = y), color = "#ff0303") +  geom_vline(xintercept = 0, linetype = 2) +
-  geom_point(data = ic1,aes(x = x, y = y, group = y) , color = "#050505") + labs(x = "Diferencia de ELPPD", y = "Modelos")
+  geom_point(data = ic1,aes(x = x, y = y, group = y) , color = "#050505") + labs(x = "Diferencia de ELPPD", y = "Modelos") + theme_minimal(base_size = 20)
 
 
 
 
 cadenas = modeloMulti5 %>%  setNames(c("Intercepto", "VHI", "ECSF", rep("1",385))) %>% 
-  traceplot(pars = c("b0", "b1", "b2")) + labs(colour = "Cadenas")
+  traceplot(pars = c("b0", "b1", "b2")) + labs(colour = "Cadenas") + theme(text = element_text(size = 20))
 
 b0.df = as.data.frame(extract(modeloMulti5, "b0"))
 b1.df = as.data.frame(extract(modeloMulti5, "b1"))
 b2.df = as.data.frame(extract(modeloMulti5, "b2"))
 
-b0p = ggplot(b0.df) + geom_density(aes(x = b0), fill = "#38e28c", color = "#000000") + labs(y = "Densidad", x = expression(beta[0]))
-b1p = ggplot(b1.df) + geom_density(aes(x = 1000*b1/sd(cerebros$lh_subcx_hippocampus_volume)), fill = "#38e28c", color = "#000000") + labs(y = "Densidad", x = expression(beta[VHI]))
-b2p = ggplot(b2.df) + geom_density(aes(x = b2/sd(cerebros$lh_cortex_superiorfrontal_thickness)), fill = "#38e28c", color = "#000000") + labs(y = "Densidad", x = expression(beta[ECSF]))
+b0p = ggplot(b0.df) + geom_density(aes(x = b0), fill = "#38e28c", color = "#000000") + labs(y = "Densidad", x = expression(beta[0])) + theme_minimal(base_size = 20) 
+b1p = ggplot(b1.df) + geom_density(aes(x = 1000*b1/sd(cerebros$lh_subcx_hippocampus_volume)), fill = "#38e28c", color = "#000000") + labs(y = "Densidad", x = expression(beta[VHI])) + theme_minimal(base_size = 20) 
+b2p = ggplot(b2.df) + geom_density(aes(x = b2/sd(cerebros$lh_cortex_superiorfrontal_thickness)), fill = "#38e28c", color = "#000000") + labs(y = "Densidad", x = expression(beta[ECSF])) + theme_minimal(base_size = 20) + scale_x_continuous(breaks = seq(-13,-4,3))
 
-posterior = ggarrange(b0p, b1p, b2p)
+posterior = ggarrange(b0p, b1p, b2p, ncol = 3)
 
 
 
@@ -250,8 +250,11 @@ for (i in 1:500) {
   data_sample[((i-1)*(381)+1):((381)*i),] = data.frame(pi = c(rep(sample1$b0[i], length(seq.vhi)) + sample1$b1[i]*seq.vhi), grupo = rep(i,each = 381), edad = rep(seq(1.8,5.6,.01)))
 }
 
-pps1 = ggplot(data_sample) + stat_lineribbon(aes(x = V3, y = exp(V1)/(1+exp(V1)), fill_ramp = after_stat(level)), fill = "#38e28c", alpha = .8) + 
-  scale_x_continuous(breaks = seq(1.8,5.6,.5), limits = c(1.8,5.6)) + labs(y = expression(hat(pi)), x = expression(paste("VHI (", {cm^3}, ")"))) + theme_minimal() + theme(legend.position = "none")
+exp(mean(1000*esbozo$b1/sd(cerebros$lh_subcx_hippocampus_volume)))
+
+pps1 = ggplot(data.frame(x = c(0, 5), y = c(0, 1))) + stat_lineribbon(data = data_sample, aes(x = V3, y = exp(V1)/(1+exp(V1)), fill_ramp = after_stat(level)), fill = "#38e28c", alpha = .8) + 
+  scale_x_continuous(breaks = seq(1.8,5.6,.5), limits = c(1.8,5.6)) + labs(y = expression(pi), x = expression(paste("VHI (", {cm^3}, ")"))) + theme_minimal(base_size = 20) + theme(legend.position = "none") + 
+  geom_text(x = 4.3, y = 0.9, label = expression(paste(e^{hat(E)(beta[VHI])}==0.20)), size = 10)
 
 
 seq.ecsf = (seq(1.8,3.2,.01)-mean(cerebros$lh_cortex_superiorfrontal_thickness))/sd(cerebros$lh_cortex_superiorfrontal_thickness)
@@ -261,8 +264,42 @@ for (i in 1:500) {
   data_sample2[((i-1)*(141)+1):((141)*i),] = data.frame(pi = c(rep(sample2$b0[i], length(seq.ecsf)) + sample2$b2[i]*seq.ecsf), grupo = rep(i,each = length(seq.ecsf)), edad = rep(seq(1.8,3.2,.01)))
 }
 
-pps2 = ggplot(data_sample2) + stat_lineribbon(aes(x = V3, y = exp(V1)/(1+exp(V1)), fill_ramp = after_stat(level)), fill = "#38e28c", alpha = .8) + 
-  scale_x_continuous(breaks = seq(1.8,3.2,.5), limits = c(1.8,3.2)) + labs(y = expression(hat(pi)), x = expression(paste("ECSF (", {mm}, ")"))) + theme_minimal() + theme(legend.position = "none") + scale_y_continuous(limits = c(0,1))
+exp(mean(esbozo$b2/sd(cerebros$lh_cortex_superiorfrontal_thickness))/10)
 
 
-save(ic_comp,cadenas,posterior, pps1, pps2, file = "ic_comp.RData")
+pps2 = ggplot(data.frame(x = c(0, 10), y = c(0, 10))) + stat_lineribbon(data = data_sample2, aes(x = V3, y = exp(V1)/(1+exp(V1)), fill_ramp = after_stat(level)), fill = "#38e28c", alpha = .8) + 
+  scale_x_continuous(breaks = seq(1.8,3.2,length.out = 8), limits = c(1.8,3.2)) + labs(y = expression(pi), x = expression(paste("ECSF (", {mm}, ")"))) + theme_minimal(base_size = 20) + theme(legend.position = "none") + scale_y_continuous(limits = c(0,1)) +
+  geom_text(x = 2.8, y = 0.9, label = expression(paste(e^{hat(E)(beta[ECSF])}%.%0.1==0.47)), size = 8)
+
+set.seed(45)
+
+sample3 = esbozo[sample(1:nrow(esbozo), size = 500),]
+data_sample3 = as.data.frame(matrix(nrow = 128*500, ncol = 3))
+df.ppc = as.data.frame(matrix(0,nrow = 500, ncol = 128))
+for (i in 1:500) {
+  df.ppc[i,] = (rep(sample3[i,1],128) + sample3[i, 2] * scale(cerebros$lh_subcx_hippocampus_volume)[1:128] + sample3[i, 3] * scale(cerebros$lh_cortex_superiorfrontal_thickness[1:128]))
+  
+}
+n.ppc = as.data.frame(matrix(0,nrow = 500, ncol = 1))
+for (i in 1:500) {
+n.ppc[i,] = sum(rbinom(128,1,as.numeric(exp(df.ppc[1,])/(exp(df.ppc[1,])+1))))
+}
+n.ppc
+
+data.frame(x = n.ppc)
+
+ppc = ggplot(cerebros) + geom_bar(aes(x = diag), fill = "#5aeeac" , width = .5) + stat_summary(data = n.ppc, mapping = aes(x = 2, y = V1), fun.data = mean_sdl, color = "#047e46") +  stat_summary(data = n.ppc, mapping = aes(x = 1, y = 128-V1), fun.data = mean_sdl, color = "#047e46") + labs(x = "Diagnóstico", y = "Frecuencia absoluta") + theme_minimal(base_size = 20) +
+  labs(caption = "Diagnóstico observado vs intervalo de valores predichos")  +  theme(plot.caption = element_text(size = 20,hjust = .5, color = "#555555"))
+
+a = data.frame(x = c(median(ye0),median(ye1),median(ye2),median(ye3)))
+a$cual = c("as", "S = Masculino\nI=1.5T\nR=GE", "S = Femenino\nI=3T\nR=GE","S = Femenino\nI=1.5T\nR=Philips")
+plw = ggplot(a) + geom_bar(aes(x = cual, y = x), stat = "identity", fill = "#5aeeac") + labs(x = "Nivel", y = expression(hat(pi))) + geom_point(aes(x = cual, y = x), color = "#047e46")+ scale_y_continuous(limits = c(0, 1)) + geom_line(data = suma, aes(y = ye, x = re+1, group = re), color = "#047e46") + scale_x_discrete(labels = c(expression(beta[0]), expression(beta[0]+beta["S"]), expression(beta[0]+beta["I"]+beta["S"]), expression(beta[0]+beta["R"]+beta["I"]+beta["S"]))) + theme_minimal(base_size = 20)
+
+
+
+
+
+
+
+
+save(ic_comp, ppc,cadenas,posterior, pps1, pps2, file = "ic_comp.RData")

@@ -72,7 +72,7 @@ edadxvhi = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("VHI⠀", (cm^{3}))),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 edadxvhi2 = ggplot(cerebros) +
   geom_ribbon(
@@ -95,7 +95,7 @@ edadxvhi2 = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("VHI⠀", (cm^{3}))),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 
 # ------------------------------ VI ---------------------------------------
@@ -161,7 +161,7 @@ alpha = 0.6, size = 2) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("VI (100 ",cm^{3}, ")")),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 
 edadxvi2 = ggplot(cerebros) +
@@ -185,7 +185,7 @@ edadxvi2 = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("VI (100 ",cm^{3}, ")")),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 
 # ------------------------------- ECSF ----------------------------
@@ -252,7 +252,7 @@ edadxecsf = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("ECSF⠀", (mm))),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 edadxecsf2 = ggplot(cerebros) +
   geom_ribbon(
@@ -275,7 +275,7 @@ edadxecsf2 = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("ECSF (mm)")),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 
 
@@ -342,7 +342,7 @@ edadxvcf = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("VCF⠀", (cm^{3}))),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 edadxvcf2 = ggplot(cerebros) +
   geom_ribbon(
@@ -366,7 +366,7 @@ edadxvcf2 = ggplot(cerebros) +
     data = data_mu
   ) +
   labs(x = "Edad", y = expression(paste("VCF⠀", (cm^{3}))),
-       color = "Diagnóstico") + theme_minimal()
+       color = "Diagnóstico") + theme_minimal(base_size = 20)
 
 
 

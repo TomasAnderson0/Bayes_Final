@@ -200,7 +200,7 @@ Bres <- Bres %>% mutate(variable = c(rep("Resonador GE", 5400), rep("Resonador P
 grafico_betas <- rbind(Bedad, Bsexo, BVHI, BVI, Becsf, Bvcf, Binte, Bres)
 
 reglogplot = ggplot(grafico_betas) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color = c("#057057","#057057","#057057","#057057","#057057","#F32835","#057057","#057057","#F32835")) + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal() + scale_x_continuous(breaks = -2:2)
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal(base_size = 20) + scale_x_continuous(breaks = -2:2)
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -235,7 +235,7 @@ betas <- data.frame(b1 = c(betas$b1, betas$b2, betas$b3, betas$b4, betas$b5, bet
 betas <- betas %>% mutate(variable = c(rep("Edad", 5400), rep("VHI", 5400), rep("ECSF", 5400), rep("VCF", 5400), rep("Intensidad", 5400), rep("Resonador GE", 5400), rep("Resonador Philips", 5400)))
 
 reglogplot1 = ggplot(betas) + stat_summary(aes(y = variable, x = b1), fun.data = mean_sdl, color =  c("#057057","#F32835","#F32835","#F32835","#F32835","#F32835","#057057")) + 
-  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal()
+  geom_vline(xintercept = 0, linetype = 2) + labs(y = "Variable", x = "Coeficiente") + theme_minimal(base_size = 20)
 
 looM1 <- loo(modeloMulti)
 

@@ -1,6 +1,5 @@
 ---
 title: "Enfoque bayesiano en diagnostico de enfermedades neurodegenerativas"
-subtitle: "TP Final"
 controls: True
 format:
   revealjs:
@@ -8,7 +7,7 @@ format:
 editor: visual
 ---
 
-## Introducción
+## Introducción 
 
 ```{r}
 library(ggplot2)
@@ -159,7 +158,7 @@ Se tiene información de 128 pacientes que se sometieron a diferentes estudios d
 
 
 
-## Análisis exploratorio
+## Análisis exploratorio 
 
 ::: {style="font-size: 87%;"}
 Las variables categóricas tienen las siguientes distribuciones marginales:
@@ -169,7 +168,6 @@ Las variables categóricas tienen las siguientes distribuciones marginales:
 
 
 ```{r , fig.align='center'}
-#| fig.cap:  Distribución de las variables categoricas
 graficores <- cerebros %>% select(resonador_fab) %>%
   count(categ = resonador_fab) %>% mutate(n = n/128) %>% 
   mutate(barras = as.factor(c(3, 2, 1))) %>% mutate(v = "Resonador")
@@ -197,9 +195,9 @@ ggplot() +
                                              .75, .25),
                                 label = categ), 
             vjust = -0.5, size = 6, color = "white") + 
-  theme_minimal() +
+  theme_minimal(base_size = 20) +
   theme(legend.position = "none") +
-  labs(y = "Proporción", x = "Variable")
+  labs(y = "Proporción", x = "Variable", caption = "Distribución de las variables categoricas") + theme(plot.caption = element_text(hjust = .5, vjust = -1, color = "#555555"))
 
 ```
 
@@ -210,20 +208,7 @@ ggplot() +
 ::: {style="font-size: 87%;"}
 Para dimensionar las distribuciones de las variables cuantitativas, se presentan los siguiente gráficos:
 
-```{r}
-#| fig.cap:  Distribución de las variables continuas
-plotc1 = ggplot(cerebros) + geom_boxplot(aes(y = lh_subcx_hippocampus_volume), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("VHI⠀", (cm^{3}))), y = "") + xlim(-.8,.8)
-
-plotc2 = ggplot(cerebros) + geom_boxplot(aes(y = xh_general_etiv_volume), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("VI⠀(100", cm^{3}, ")")), y = "") + xlim(-.8,.8)
-
-plotc3 = ggplot(cerebros) + geom_boxplot(aes(y = lh_cortex_superiorfrontal_thickness), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("ECSF⠀", (mm))), y = "") + xlim(-.8,.8)
-
-plotc4 = ggplot(cerebros) + geom_boxplot(aes(y = lh_cortex_fusiform_volume), fill = "#168168")  + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = expression(paste("VCF⠀", (cm^{3}))), y = "")+ xlim(-.8,.8)
-
-plotc5 = ggplot(cerebros) + geom_boxplot(aes(y = edad), fill = "#168168") + theme_minimal() + theme(axis.ticks.x.bottom = element_blank(), axis.text.x.bottom = element_blank(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) + labs(title = "Edad", y = "") + xlim(-.8,.8)
-
-ggarrange(plotc1, plotc2, plotc3, plotc4, plotc5)
-```
+![](Imagenes/plot6.png)
 
 
 :::

@@ -1,9 +1,9 @@
 load("ic_comp.RData")
 
 ggsave("Imagenes/plot1.png", plot = posterior +
-          labs(caption = "Distribuciones a posteriori de los parametros")  +  theme(plot.caption = element_text(size = 20,hjust = .5, color = "#555555")), width = 15, height = 5)
+          labs(caption = "Distribuciones a posteriori de los parámetros")  +  theme(plot.caption = element_text(size = 20,hjust = .5, color = "#555555")), width = 15, height = 5)
 ggsave("Imagenes/plot2.png",plot = ggarrange(pps1, pps2)+
-         labs(caption = expression(paste("Distribución a posteriori de", pi ," según los valores de la variable")))  +  theme(plot.caption = element_text(size = 20,hjust = .5, color = "#555555")), width = 15, height = 5)
+         labs(caption = expression(paste("Distribución a posteriori de ", pi ," según los valores de la variable")))  +  theme(plot.caption = element_text(size = 20,hjust = .5, color = "#555555")), width = 15, height = 5)
 ggsave("Imagenes/plot4.png",plot = cadenas + labs(caption = "Cadenas de MCMC obtenidas con HMC")  +  theme(plot.caption = element_text(hjust = .5, color = "#555555"), size = 50), width = 15, height = 5)
 
 

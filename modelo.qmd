@@ -39,18 +39,18 @@ Entonces, para pasar a modelar una recta en vez de la variable dicotómica, se a
 ::: {style="font-size: 87%;"}
 Por lo que la nueva variable a modelar será:
 
-$$g(\pi_i)=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$ Entonces, se requiere plantear cuáles son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide plantear modelos univariados para cada variable, y quedarse con aquellas donde el intervalo de credibilidad a *posteriori* del párametro no cubra el cero.
+$$g(\pi_i)=\log\left( \frac{\pi_i}{1-\pi_i} \right) = \beta_0 + \beta_1 x_{1_i} + \beta_2 x_{2_i} + \dots$$ Entonces, se requiere plantear cuáles son las variables que ayudan a explicar la probabilidad de que una persona muestre deterioro cognitivo patológico. Para ello, primero se decide plantear modelos univariados para cada variable, y quedarse con aquellas donde el intervalo de credibilidad a *posteriori* del parámetro no cubra el cero.
 :::
 
 ## Distribuciones a *priori*
 
 ::: {style="font-size: 87%;"}
-Al no tener mucha información sobre el tema, se decide plantear para todos los paremetros  distribuciones a *priori* abarcativas, simetricas al 0 donde se le da un mayor peso al no efecto. La distribución que se usa y cumple dichos criterios es: $\; \; \;\beta_j \sim N(0,1) \ \ \forall j=\overline{0,9}$
+Al no tener mucha información sobre el tema, se decide plantear para todos los parámetros  distribuciones a *priori* abarcativas, simétricas al 0 donde se le da un mayor peso al no efecto. La distribución que se usa y cumple dichos criterios es: $\; \; \;\beta_j \sim N(0,1) \ \ \forall j=\overline{0,9}$
 :::
 
 ```{r, fig.align='center'}
 datan = data.frame(y = dnorm(seq(-3,3,.1)), x = seq(-3,3,.1))
-ggplot(datan) + geom_line(aes(x = x , y = y)) + labs(x = "Parametro", y = "Densidad", caption=" Priors univariados para los coeficientes") + scale_x_continuous(breaks = -2:2) + theme_minimal(base_size = 20) + theme(plot.caption = element_text(hjust = .5, color = "#555555"))
+ggplot(datan) + geom_line(aes(x = x , y = y)) + labs(x = "Parámetro", y = "Densidad", caption=" Priors univariados para los coeficientes") + scale_x_continuous(breaks = -2:2) + theme_minimal(base_size = 20) + theme(plot.caption = element_text(hjust = .5, color = "#555555"))
 
 ```
 
@@ -59,7 +59,7 @@ ggplot(datan) + geom_line(aes(x = x , y = y)) + labs(x = "Parametro", y = "Densi
 
 ::: {style="font-size: 87%;"}
 
-Se escalan todas las variables continuas y se grafica la probabildad a priori de tener una enfermedad neurodegenerativa del modelo completo para los valores promedios de las variables cuantitativas.
+Se escalan todas las variables continuas y se grafica la probabilidad a priori de tener una enfermedad neurodegenerativa del modelo completo para los valores promedios de las variables cuantitativas.
 
 :::
 
@@ -68,7 +68,7 @@ Se escalan todas las variables continuas y se grafica la probabildad a priori de
 ## Distribuciones a *priori*
 
 ::: {style="font-size: 87%;"}
-Bajo la distribución propuesta, los posibles valores de la probabilidad de tener una enfermedad neurodegenerativa a traves del cambio de una variable cuantitativa es:
+Bajo la distribución propuesta, los posibles valores de la probabilidad de tener una enfermedad neurodegenerativa a través del cambio de una variable cuantitativa es:
 :::
 
 ```{r, fig.align='center'}
@@ -90,7 +90,7 @@ ggplot(data_ppp) + stat_lineribbon(aes(x = V3, y = exp(V1)/(1+exp(V1)), fill = V
 
 
 
-## Distribuciones a *priori*
+## Selección de variables
 
 ::: {style="font-size: 87%;"}
 Una vez ajustados los modelos marginales, se ven las distribuciones a *posteriori* de los coeficientes asociados a cada variable.
@@ -98,20 +98,20 @@ Una vez ajustados los modelos marginales, se ven las distribuciones a *posterior
 
 ```{r, fig.align='center'}
 load("reglin.RData")
-reglogplot + labs(caption = "Posteriors de los parametros para cada modelo univariado") + theme(plot.caption = element_text(hjust = .5, color = "#555555"))
+reglogplot + labs(caption = "Posteriors de los parámetros para cada modelo univariado") + theme(plot.caption = element_text(hjust = .5, color = "#555555"))
 ```
 
 
-## Titulo
+## Selección de variables
 
 ::: {style="font-size: 87%;"}
 
-Luego, se plantea un modelo con todas las variables con coeficientes asociados distintos de 0 y se prueba si aportan a la explicación de la probabilidad de tener una enfermedad neurodegenerativa al estar las demas presentes.
+Luego, se plantea un modelo con todas las variables con coeficientes asociados distintos de 0 y se prueba si aportan a la explicación de la probabilidad de tener una enfermedad neurodegenerativa al estar las demás presentes.
 :::
 
 ```{r, fig.align='center'}
 reglogplot1 + theme(plot.caption = element_text(hjust = .5, color = "#555555")) +
-  labs(caption = "Posteriors de los parametros para el modelo conjunto")
+  labs(caption = "Posteriors de los parámetros para el modelo conjunto")
 ```
 
 
@@ -123,7 +123,7 @@ Entonces, se comparan los ELPPD de distintos modelos propuestos con el que tiene
 
 ```{r}
 load("ic_comp.RData")
-ic_comp + theme_minimal(base_size = 20)  + theme(plot.caption = element_text(hjust = .5, color = "#555555")) + labs(caption = "Diferencia de ELPPD de los modelo con el de VHI y ECSF")
+ic_comp + theme_minimal(base_size = 20)  + theme(plot.caption = element_text(hjust = .5, color = "#555555")) + labs(caption = "Diferencia de ELPPD de los modelos con el de VHI y ECSF")
 ```
 
 
@@ -134,7 +134,7 @@ El modelo final es el siguiente:
 
 $$g(\pi_i)= \beta_0 + \beta_1 VHI_i  + \beta_2 ECSF_i $$ 
 
-Una vez, ajustado el modelo se realiza la evaluación de las cadenas generados por HMC.
+Una vez, ajustado el modelo se realiza la evaluación de las cadenas generadas por HMC.
 :::
 
 ## Ajuste y evaluación del modelo
@@ -152,7 +152,7 @@ Las cadenas generadas fueron las siguientes:
 Todas tienen un $\hat{R}=1$, por lo que las distintas cadenas convergen a la misma distribución. Además, las trazas para cada cadena parece seguir un orden aleatorio por lo que se considera que la muestra extraída es representativa de la distribución del *posterior*.
 :::
 
-## *Posteriors* de los parametros
+## *Posteriors* de los parámetros
 
 ::: {style="font-size: 87%;"}
 Una vez ajustado el modelo, se obtienen las siguientes distribuciones a *posteriori* para las escalas anteriores a la estandarización.
@@ -161,7 +161,7 @@ Una vez ajustado el modelo, se obtienen las siguientes distribuciones a *posteri
 ![](Imagenes/plot1.png){fig-align="middle"} 
 
 
-## Interpretación de los parametros
+## Interpretación de los parámetros
 
 ::: {style="font-size: 87%;"}
 Para ver como afectan estos *posteriors* a la probabilidad de desarrollar una enfermedad neurodegenerativa, se presenta el *posterior* de $\pi$ para distintos valoers de una variable con la otra tomando su valor medio.
@@ -180,7 +180,7 @@ Se realizan pruebas predictivas a *posteriori* para ver si el modelo ajusta bien
 ## Conclusión
 
 ::: {style="font-size: 87%;"}
-Se sabe que existe una fuerte relación entre la morfologia cerebral y la presencia de enfermedades neurodegenerativas. Ademas, la morfologia del cerebro se ve reducida en tamaño en consecuencia del aumento de la edad. 
+Se sabe que existe una fuerte relación entre la morfología cerebral y la presencia de enfermedades neurodegenerativas. Además, la morfología del cerebro se ve reducida en tamaño en consecuencia del aumento de la edad. 
 
 Entonces, al aportar información relacionada, el mejor modelo para explicar la presencia de enfermedades neurodegenerativa es aquel que tiene las variables VHI y ECSF, al ser las que explican mejor dicha existencia. 
 :::

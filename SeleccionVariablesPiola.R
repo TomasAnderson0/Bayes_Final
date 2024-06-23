@@ -269,7 +269,7 @@ exp(mean(esbozo$b2/sd(cerebros$lh_cortex_superiorfrontal_thickness))/10)
 
 pps2 = ggplot(data.frame(x = c(0, 10), y = c(0, 10))) + stat_lineribbon(data = data_sample2, aes(x = V3, y = exp(V1)/(1+exp(V1)), fill_ramp = after_stat(level)), fill = "#38e28c", alpha = .8) + 
   scale_x_continuous(breaks = seq(1.8,3.2,length.out = 8), limits = c(1.8,3.2)) + labs(y = expression(pi), x = expression(paste("ECSF (", {mm}, ")"))) + theme_minimal(base_size = 20) + theme(legend.position = "none") + scale_y_continuous(limits = c(0,1)) +
-  geom_text(x = 2.8, y = 0.9, label = expression(paste(e^{hat(E)(beta[ECSF])}%.%0.1==0.47)), size = 8)
+  geom_text(x = 2.8, y = 0.9, label = expression(paste(e^{hat(E)(beta[ECSF])%.%0.1}==0.47)), size = 8)
 
 set.seed(45)
 

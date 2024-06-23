@@ -146,7 +146,7 @@ Se ajustan los modelos y se obtienen los siguientes resultados:
 
 load("reglin1.RData")
 
-ggarrange(reglin5, reglin6, reglin7, reglin8)+   labs( caption = "Posteriors de los parametros para cada variable morfológica") + theme(plot.caption = element_text(hjust = .5, vjust = 3, color = "#555555"))
+ggarrange(reglin5, reglin6, reglin7, reglin8)+   labs( caption = "Posteriors de los parámetros para cada variable morfológica") + theme(plot.caption = element_text(hjust = .5, vjust = 3, color = "#555555"))
 ```
 
 ## Análisis exploratorio
@@ -192,7 +192,7 @@ geom_text(x = 2, y = .25, label = "Femenino", color = "#FFFFFF", size = 6)  + gg
 
 plot6 = ggplot(cerebros) + geom_boxplot(aes(x = diag, y = edad), fill = "#168168") + scale_x_discrete(name = "Diagnóstico") + scale_y_continuous(name = "Edad", breaks = seq(20,90,10)) +ggtitle("Edad") + theme_minimal(base_size = 20)
 
-ggarrange(plot6, plot5) + labs( caption = "Distribución de las variables demograficas vs diagnóstico") + theme(plot.caption = element_text(hjust = .5, vjust = 2, color = "#555555"))
+ggarrange(plot6, plot5) + labs( caption = "Distribución de las variables demográficas vs diagnóstico") + theme(plot.caption = element_text(hjust = .5, vjust = 2, color = "#555555"))
 ```
 
 ## Análisis exploratorio

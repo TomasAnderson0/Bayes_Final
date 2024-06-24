@@ -215,9 +215,12 @@ ic = data.frame(x = c(i1,i2,i3,i4,i5,i6,i7,i8,i9),y = factor(rep(c("Con VCF","Co
 ####################################################
 ic1 = data.frame(x = c(mean(i1),mean(i2),mean(i3),mean(i4),mean(i5),mean(i6),mean(i7),mean(i8),mean(i9)),y = factor(rep(c("Con VCF","Con VI","Con Edad","Con Intensidad","Con Sexo","Con Resonador","Sin VHI","Sin ECSF","Con Interacción")), levels = c("Con Interacción","Sin ECSF","Sin VHI","Con Resonador","Con Sexo","Con Intensidad","Con Edad","Con VI","Con VCF")))
 
-
-ic_comp =ggplot(ic) + geom_line(aes(x = x, y = y, group = y), color = "#ff0303") +  geom_vline(xintercept = 0, linetype = 2) +
-  geom_point(data = ic1,aes(x = x, y = y, group = y) , color = "#050505") + labs(x = "Diferencia de ELPPD", y = "Modelos") + theme_minimal(base_size = 20)
+colores = c("#0000d9","#0000d9","#0000d9","#0000d9","#0000d9","#0000d9","#F32835","#F32835",
+            "#F32835","#F32835","#F32835","#F32835","#0000d9","#0000d9","#F32835","#F32835",
+            "#0000d9","#0000d9")
+color.dot = rev(c("#0000d9","#0000d9","#0000d9", "#F32835","#F32835","#F32835","#0000d9","#F32835","#0000d9"))
+ic_comp =ggplot(ic) + geom_line(aes(x = x, y = y, group = y), color = colores) +  geom_vline(xintercept = 0, linetype = 2) +
+  geom_point(data = ic1,aes(x = x, y = y, group = y) , color = color.dot) + labs(x = "Diferencia de ELPPD", y = "Modelos") + theme_minimal(base_size = 20)
 
 
 

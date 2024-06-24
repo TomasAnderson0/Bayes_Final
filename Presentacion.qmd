@@ -1,5 +1,5 @@
 ---
-title: "Enfoque bayesiano en diagnostico de enfermedades neurodegenerativas"
+title: "Enfoque bayesiano en el diagnóstico de enfermedades neurodegenerativas"
 controls: True
 format:
   revealjs:
@@ -434,7 +434,7 @@ ggarrange(plot7, plot8) +   labs( caption = "Distribución de las variables tecn
 load("modelob0.RData")
 ```
 
-## Regresión logística
+  ## Regresión logística
 
 ::: {style="font-size: 87%;"}
 Para modelar los diagnósticos, se plantea un modelo bayesiano de regresión logística. La variable respuesta es:

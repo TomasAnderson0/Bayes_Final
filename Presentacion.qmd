@@ -434,7 +434,7 @@ ggarrange(plot7, plot8) +   labs( caption = "Distribución de las variables tecn
 load("modelob0.RData")
 ```
 
-  ## Regresión logística
+## Regresión logística
 
 ::: {style="font-size: 87%;"}
 Para modelar los diagnósticos, se plantea un modelo bayesiano de regresión logística. La variable respuesta es:
@@ -538,10 +538,7 @@ reglogplot1 + theme(plot.caption = element_text(hjust = .5, color = "#555555")) 
 Entonces, se comparan los ELPPD de distintos modelos propuestos con el que tiene VHI y ECSF. 
 :::
 
-```{r}
-load("ic_comp.RData")
-ic_comp + theme_minimal(base_size = 20)  + theme(plot.caption = element_text(hjust = .5, color = "#555555")) + labs(caption = "Diferencia de ELPPD de los modelos con el de VHI y ECSF")
-```
+![](Imagenes/plot7.png){fig-align="middle"}
 
 
 ## Ajuste y evaluación del modelo

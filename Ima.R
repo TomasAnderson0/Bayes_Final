@@ -49,8 +49,8 @@ asdasd = ggarrange(plotc1, plotc2, plotc3, plotc4, plotc5) +
   labs( caption = "Distribución de las variables categoricas") + theme(plot.caption = element_text(hjust = .5, vjust = 2, color = "#555555"))
 
 
-
-
+ggsave("Imagenes/plot7.png", plot = ic_comp + theme_minimal(base_size = 20)  + theme(plot.caption = element_text(hjust = .5, color = "#555555")) + labs(caption = "Diferencia de ELPPD de los modelos con el de VHI y ECSF")
+, width = 15, height = 5)
 
 ggsave("Imagenes/plot6.png",plot = asdasd, width = 10, height = 5)
 
